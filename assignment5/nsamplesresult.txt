@@ -1,0 +1,5 @@
+number of samples / time taken to run
+1/2.52963
+2/4.23598
+4/7.8121
+8/14.9326
