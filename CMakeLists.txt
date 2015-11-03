@@ -72,8 +72,7 @@ if (WIN32)
 elseif (APPLE)
     include_directories("./external/freeimage/distrib/osx")
 else()
-    find_package(FreeImage REQUIRED)
-    include_directories(${FREEIMAGE_INCLUDE_DIRS})
+    include_directories("./external/freeimage/distrib/unix")
 endif()
 
 file(GLOB_RECURSE ASSIGNMENT_SOURCES "./assignment*/*.cpp")
@@ -117,7 +116,7 @@ if (WIN32)
 elseif (APPLE)
     target_link_libraries(cs148raytracer "${CMAKE_CURRENT_SOURCE_DIR}/external/freeimage/distrib/osx/libfreeimage.a")
 else()
-    target_link_libraries(cs148raytracer ${FREEIMAGE_LIBRARY})
+    target_link_libraries(cs148raytracer "${CMAKE_CURRENT_SOURCE_DIR}/external/freeimage/distrib/unix/libfreeimage.a")
 endif()
 
 # Source Files
