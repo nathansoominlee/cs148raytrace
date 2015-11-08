@@ -53,9 +53,14 @@ std::shared_ptr<Scene> Assignment6::CreateScene() const
     std::shared_ptr<Light> pointLight = std::make_shared<PointLight>();
     pointLight->SetPosition(glm::vec3(0.01909f, 0.0101f, 1.97028f));
     pointLight->SetLightColor(glm::vec3(1.f, 1.f, 1.f));
-
+				
 // Assignment 6 Part 1 TODO: Change the '1' here.
-#define ACCELERATION_TYPE 1
+// ACCELERATION_TYPE 0 will use native acceleration
+// ACCELERATION_TYPE 1 will use a bounding volume hierarchy
+// ACCELERATION_TYPE 2 will use a uniform grid
+// Record the time it takes for each configuration
+
+#define ACCELERATION_TYPE 2
 #if ACCELERATION_TYPE == 0
     newScene->GenerateAccelerationData(AccelerationTypes::NONE);
 #elif ACCELERATION_TYPE == 1
