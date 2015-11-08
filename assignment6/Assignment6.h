@@ -14,4 +14,20 @@ public:
     virtual int GetMaxReflectionBounces() const override;
     virtual int GetMaxRefractionBounces() const override;
     virtual glm::vec2 GetImageOutputResolution() const override;
+
+    std::shared_ptr<class Scene> CreateSceneFromSheet() const;
+
+private:
+//https://docs.google.com/spreadsheets/d/1azLEDHN8ghwzDDCjWozNAQ1ehgD3wAbm8a1xC9FaA8U/export?exportFormat=tsv
+    const std::string baseURL = 
+        "https://docs.google.com/spreadsheets/d/";
+    const std::string key = 
+        "1azLEDHN8ghwzDDCjWozNAQ1ehgD3wAbm8a1xC9FaA8U";
+    const std::string fmt = 
+        "/export?exportFormat=tsv"; // tab-separated values
+
+    const std::string sheetURL = baseURL + key + fmt;
+    const std::string sheet_path = "final_scene_sheet.tsv";
+	const std::string sheet_path_local = "C:/Users/natha/Downloads/scene_scanline.tsv";
+
 };
