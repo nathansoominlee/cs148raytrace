@@ -17,24 +17,22 @@ endif( CMAKE_SIZEOF_VOID_P EQUAL 8 )
 
 # Get the hostname so that we can use different paths
 # depending on whether Nathan or Mike is compiling
-# This is needed for the assimplib location and
-# for the OpenGL version.
+# This is needed for the assimplib locations on our macs
 
 site_name(HOSTNAME)
 
 if (HOSTNAME STREQUAL "coche")
     set(MIKE True)
-    set(MYNAME "Mike")
-    set(OPENGL_MAJOR "3")
-    set(OPENGL_MINOR "3")
 else()
     set(MIKE False)
-    set(MYNAME "Nathan")
-    set(OPENGL_MAJOR "4")
-    set(OPENGL_MINOR "1")
 endif()
 
-message(STATUS "Generating buildfiles for ${MYNAME}'s machine, ${HOSTNAME}")
+# If we are on a linux machine then Mike wants to use openmp
+if (NOT WIN32)
+    if (NOT APPLE)
+        set(GCC_OMP_FLAG "-fopenmp")
+    endif()
+endif()
 
 # Import utility cmake scripts...mainly useful for Linux systems since we provide
 # the external libraries elsewhere.
@@ -49,7 +47,15 @@ endif()
 
 # CPP Flags
 if (NOT WIN32)
-	set(CXX_FLAGS "-Wall -std=c++11 -Wno-missing-braces")
+
+    set(CXX_FLAGS "-Wall -std=c++11 -Wno-missing-braces ${GCC_OMP_FLAG}")
+
+    # must give omp flag to the linker otherwise it will show up in
+    #    CMakeFiles/cs148raytracer.dir/flags.make  but not in
+    #    CMakeFiles/cs148raytracer.dir/link.txt    and therefore won't make it to link line
+    # causing undefined reference errors, e.g. "undefined reference to `GOMP_parallel'"
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_OMP_FLAG}")
+
 endif()
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
@@ -97,9 +103,7 @@ if (WIN32)
     target_link_libraries(cs148raytracer "${CMAKE_CURRENT_SOURCE_DIR}/external/assimp/distrib/windows/lib${EX_PLATFORM_STR}/assimp.lib")
 elseif (APPLE)
 
-    # Nathan and Mike have different assimplib locations!
-    message(STATUS "Using ${MYNAME}'s assimplib")
-
+    # Nathan and Mike have different assimplib locations for their macs
     if (MIKE)
         target_link_libraries(cs148raytracer "${CMAKE_CURRENT_SOURCE_DIR}/external/assimp/lib/libassimp.dylib")
     else() # Nathan
