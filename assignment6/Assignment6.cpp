@@ -40,14 +40,29 @@ std::shared_ptr<Scene> Assignment6::CreateSceneFromSheet() const
 
     // Import the sheet
     Rows rows;
-    SheetReader::ImportSheet(this->sheetURL, rows);
+    SheetReader::ImportSheet(this->sheet_path, rows);
 
     // Parse the objects
+    std::cout << "Parsing objects..." << std::endl;
     std::vector<FinalSceneObject> objects;
     FinalSceneObject::MakeContainer(rows, objects);
 
+    std::cout << "Adding container to scene..." << std::endl;
     // Add to scene
     FinalSceneObject::AddContainer(objects, scene);
+
+    // native
+    //scene->GenerateAccelerationData(AccelerationTypes::NONE); 
+    
+    // bounding volume hierarchy
+    std::cout << "Generating acceleration data..." << std::endl;
+    scene->GenerateAccelerationData(AccelerationTypes::BVH); 
+
+    /* uniform grid
+    UniformGridAcceleration* accelerator = dynamic_cast<UniformGridAcceleration*>(scene->GenerateAccelerationData(AccelerationTypes::UNIFORM_GRID));
+    assert(accelerator);
+    accelerator->SetSuggestedGridSize(glm::ivec3(10, 10, 10)); // try less dense (5, 5, 5) or (3, 3, 3)
+    */
 
     // Turn on the lights
     //AddPLight();
@@ -55,7 +70,7 @@ std::shared_ptr<Scene> Assignment6::CreateSceneFromSheet() const
     //AddDLight();
     
 
-    // Hard-coded point lights 
+    /* Hard-coded point lights 
     glm::vec4 color;
     glm::vec3 position;
 
@@ -84,7 +99,13 @@ std::shared_ptr<Scene> Assignment6::CreateSceneFromSheet() const
     color = glm::vec4(0.1f, 0.7f, 0.1f, 1.2f);	//green
     position = glm::vec3(30.177f, 2.f, 3.993f);
     Utility::AddPLight(color * factor, position, scene);
+    */
 
+    glm::vec4 color(1.f, 1.f, 1.f, 1.f);
+    glm::vec3 position(0.f, 2.8f, 0.f);
+    Utility::AddPLight(color, position, scene);
+
+    std::cout << "Returning new scene..." << std::endl;
     return scene;
 }
 

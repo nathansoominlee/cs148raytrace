@@ -24,29 +24,36 @@ public:
 private:
 
 // The column data looks like this
-// Try to parse? object description texture shader:p1,p2,... scale transformations:tx,ty,tz 
+// Parse? object description texture material:p1,p2,... reflectivity transparency IOR scale transformations:tx,ty,tz rotations:rx,ry,rz
 
     enum Column {TryToParse      = 0,
                  Object          = 1,
                  Description     = 2,
                  Texture         = 3,
-                 Shader          = 4,
-                 Scale           = 5,
-                 Transformations = 6,
-                 Rotations       = 7
+                 Material        = 4,
+                 Reflectivity    = 5,
+                 Transparency    = 6,
+                 IoR             = 7,
+                 Scale           = 8,
+                 Transformations = 9,
+                 Rotations       = 10
                 };
 
-    enum class ShaderType { None, Epic, BP };
+    enum class MaterialType { None, Epic, BP };
 
     FinalSceneObject(std::string name, 
                      std::string description, 
                      std::string texture,
-                     ShaderType shader_type,
+                     MaterialType material_type,
                      float epic_metallic,
                      float epic_roughness,
                      float epic_specular,
-                     glm::vec4 bp_diffuse,
-                     glm::vec4 bp_specular,
+                     glm::vec3 bp_diffuse,
+                     glm::vec3 bp_specular,
+                     float bp_shininess,
+                     float reflectivity,
+                     float transparency,
+                     float IOR,
                      float scale,
                      float tx,
                      float ty,
@@ -57,12 +64,16 @@ private:
         name(name),
         description(description),
         texture(texture),
-        shader_type(shader_type),
+        material_type(material_type),
         epic_metallic(epic_metallic),
         epic_roughness(epic_roughness),
         epic_specular(epic_specular),
         bp_diffuse(bp_diffuse),
         bp_specular(bp_specular),
+        bp_shininess(bp_shininess),
+        reflectivity(reflectivity),
+        transparency(transparency),
+        IOR(IOR),
         scale(scale),
         tx(tx),
         ty(ty),
@@ -73,21 +84,22 @@ private:
     {}
 
     // Non-static private member functions
-    std::shared_ptr<class ShaderProgram> MakeShader();
-    std::shared_ptr<class SceneObject> LoadObj(std::shared_ptr<class ShaderProgram> shader, std::shared_ptr<Scene> scene);
+    std::shared_ptr<class Material> MakeMaterial();
+    std::shared_ptr<class SceneObject> LoadObj(std::shared_ptr<class Material> material, std::shared_ptr<Scene> scene);
 
     // Static private member functions
     static void PrintRow(std::vector<std::string> row);
 
     static FinalSceneObject ParseFSO(std::vector<std::string> row);
 
-    static int ParseShader(const std::string& field,          // input parameter
-                           ShaderType& shader_type,  // output parameter
+    static int ParseMaterial(const std::string& field,          // input parameter
+                           MaterialType& material_type,  // output parameter
                            float* epic_metallic,              // output parameter
                            float* epic_roughness,             // output parameter
                            float* epic_specular,              // output parameter
-                           glm::vec4& bp_diffuse,                 // output parameter
-                           glm::vec4& bp_specular);               // output parameter
+                           glm::vec3& bp_diffuse,                 // output parameter
+                           glm::vec3& bp_specular,
+                           float* bp_shininess);               // output parameter
 
     static int ParseEpicParams(const std::string& epic_params, // input parameter
                                float* epic_metallic,           // output parameter
@@ -95,17 +107,15 @@ private:
                                float* epic_specular);          // output parameter
 
     static int ParseBPParams(const std::string& bp_params, // input parameter
-                             glm::vec4 &bp_diffuse,        // output parameter
-                             glm::vec4 &bp_specular);   // output parameter
+                             glm::vec3 &bp_diffuse,        // output parameter
+                             glm::vec3 &bp_specular,
+                             float* bp_shininess);   // output parameter
 
     static int ParseTransformations(const std::string& t_params,
                                     float* tx, float* ty, float* tz);
 
     static int ParseRotations(const std::string& r_params,
                               float* rx, float* ry, float* rz);
-
-    static int ParseScale(const std::string& scale_param,
-                          float* scale);
 
     static std::size_t ReadFloat(const std::string& in_float, float* out_float);
 
@@ -115,12 +125,16 @@ private:
     std::string name;
     std::string description;
     std::string texture;
-    ShaderType shader_type;
+    MaterialType material_type;
     float epic_metallic;
     float epic_roughness;
     float epic_specular;
-    glm::vec4 bp_diffuse;
-    glm::vec4 bp_specular;
+    glm::vec3 bp_diffuse;
+    glm::vec3 bp_specular;
+    float bp_shininess;
+    float reflectivity;
+    float transparency;
+    float IOR;
     float scale;
     float tx;
     float ty;

@@ -67,12 +67,16 @@ FinalSceneObject FinalSceneObject::ParseFSO(std::vector<std::string> row)
     std::string name = "";
     std::string description = "";
     std::string texture = "";
-    ShaderType shader_type = ShaderType::None;
+    MaterialType material_type = MaterialType::None;
     float epic_metallic = -1.f;
     float epic_roughness = -1.f;
     float epic_specular = -1.f;
-    glm::vec4 bp_diffuse = glm::vec4(-1.f, -1.f, -1.f, -1.f);
-    glm::vec4 bp_specular = glm::vec4(-1.f, -1.f, -1.f, -1.f);
+    glm::vec3 bp_diffuse = glm::vec3(-1.f, -1.f, -1.f);
+    glm::vec3 bp_specular = glm::vec3(-1.f, -1.f, -1.f);
+    float bp_shininess = -1.f;
+    float reflectivity = -1.f;
+    float transparency = -1.f;
+    float IOR = -1.f;
     float scale = -1.f;
     float tx = -1.f;
     float ty = -1.f;
@@ -114,19 +118,29 @@ FinalSceneObject FinalSceneObject::ParseFSO(std::vector<std::string> row)
                 }
                 break;
 
-            case(Column::Shader):
+            case(Column::Material):
 
-                FinalSceneObject::ParseShader(field,
-                                              shader_type,
+                FinalSceneObject::ParseMaterial(field,
+                                              material_type,
                                               &epic_metallic,
                                               &epic_roughness,
                                               &epic_specular,
                                               bp_diffuse,
-                                              bp_specular);
+                                              bp_specular,
+                                              &bp_shininess);
                 break;
 
+            case(Column::Reflectivity):
+                ReadFloat(field, &reflectivity);
+                break;
+            case(Column::Transparency):
+                ReadFloat(field, &transparency);
+                break;
+            case(Column::IoR):
+                ReadFloat(field, &IOR);
+                break;
             case(Column::Scale):
-                FinalSceneObject::ParseScale(field, &scale);
+                ReadFloat(field, &scale);
                 break;
             case(Column::Transformations):
                 FinalSceneObject::ParseTransformations(field, &tx, &ty, &tz);
@@ -139,9 +153,9 @@ FinalSceneObject FinalSceneObject::ParseFSO(std::vector<std::string> row)
     } // for i
 
     // Build and return the object
-    FinalSceneObject fso(name, description, texture, shader_type, \
-                    epic_metallic, epic_roughness, epic_specular, bp_diffuse, bp_specular, \
-                    scale, tx, ty, tz, rx, ry, rz);
+    FinalSceneObject fso(name, description, texture, material_type, \
+                    epic_metallic, epic_roughness, epic_specular, bp_diffuse, bp_specular, bp_shininess, \
+                    reflectivity, transparency, IOR, scale, tx, ty, tz, rx, ry, rz);
 
     return fso;
 
@@ -151,11 +165,11 @@ void FinalSceneObject::AddContainer(const std::vector<FinalSceneObject>& final_s
 {
     for (auto fso : final_scene_objects)
     {
-        // Get the shader
-        std::shared_ptr<class ShaderProgram> shader = fso.MakeShader();
+        // Get the material properties of the object
+        std::shared_ptr<class Material> material = fso.MakeMaterial();
 
         // Load the object into the scene
-        std::shared_ptr<class SceneObject> so = fso.LoadObj(shader, scene);
+        std::shared_ptr<class SceneObject> so = fso.LoadObj(material, scene);
 
         // Position the object
         so->SetPosition(glm::vec3(fso.tx, fso.ty, fso.tz));
@@ -167,16 +181,33 @@ void FinalSceneObject::AddContainer(const std::vector<FinalSceneObject>& final_s
 
         // Scale the object
         so->MultScale(fso.scale);
+
+        // Add acceleration data for the object
+        so->CreateAccelerationData(AccelerationTypes::BVH);
+
+        so->ConfigureAccelerationStructure([](AccelerationStructure* genericAccelerator) {
+            BVHAcceleration* accelerator = dynamic_cast<BVHAcceleration*>(genericAccelerator);
+            accelerator->SetMaximumChildren(2);
+            accelerator->SetNodesOnLeaves(2);
+        });
+
+        so->ConfigureChildMeshAccelerationStructure([](AccelerationStructure* genericAccelerator) {
+            BVHAcceleration* accelerator = dynamic_cast<BVHAcceleration*>(genericAccelerator);
+            accelerator->SetMaximumChildren(2);
+            accelerator->SetNodesOnLeaves(2);
+        });
+
+
     }
 }
 
-std::shared_ptr<class SceneObject> FinalSceneObject::LoadObj(std::shared_ptr<class ShaderProgram> shader, std::shared_ptr<Scene> scene)
+std::shared_ptr<class SceneObject> FinalSceneObject::LoadObj(std::shared_ptr<class Material> material, std::shared_ptr<Scene> scene)
 {
     std::string object_path = "objects/" + this->name + ".obj";
-    return Utility::LoadObj(shader, scene, object_path);
+    return Utility::LoadObj(material, scene, object_path);
 }
 
-std::shared_ptr<class ShaderProgram> FinalSceneObject::MakeShader()
+std::shared_ptr<class Material> FinalSceneObject::MakeMaterial()
 {
 
     std::string texture_path = "";
@@ -185,29 +216,34 @@ std::shared_ptr<class ShaderProgram> FinalSceneObject::MakeShader()
         texture_path = "textures/" + this->texture;
     }
 
-    switch (this->shader_type)
+    switch (this->material_type)
     {
-        case (ShaderType::Epic):
-            return Utility::MakeEpicShader(this->epic_metallic, this->epic_roughness, this->epic_specular, texture_path);
+        case (MaterialType::Epic):
+        //  return Utility::MakeEpicShader(this->epic_metallic, this->epic_roughness, this->epic_specular, texture_path);
+            std::cerr << "MakeMaterial: Epic not implemented." << std::endl;
+            break;
 
-        case (ShaderType::BP):
-            return Utility::MakeBlinnPhongShader(this->bp_diffuse, this->bp_specular, texture_path);
+        case (MaterialType::BP):
+            return Utility::MakeBlinnPhongMaterial(this->bp_diffuse, this->bp_specular, this->bp_shininess, 
+                    this->reflectivity, this->transparency, this->IOR, texture_path);
 
-        case (ShaderType::None):
-            std::cerr << "MakeShader: Don't know how to make None shader type." << std::endl;
+        case (MaterialType::None):
+            std::cerr << "MakeMaterial: Don't know how to make None shader type." << std::endl;
+            break;
     }
 
     return nullptr;
 }
 
 // returns 0 on success
-int FinalSceneObject::ParseShader(const std::string& field,          // input parameter
-                                 ShaderType& shader_type,  // output parameter
+int FinalSceneObject::ParseMaterial(const std::string& field,          // input parameter
+                                 MaterialType& material_type,  // output parameter
                                  float* epic_metallic,              // output parameter
                                  float* epic_roughness,             // output parameter
                                  float* epic_specular,              // output parameter
-                                 glm::vec4& bp_diffuse,                 // output parameter
-                                 glm::vec4& bp_specular)                // output parameter
+                                 glm::vec3& bp_diffuse,                 // output parameter
+                                 glm::vec3& bp_specular,
+                                 float* bp_shininess)                // output parameter
 {
     // Should look like either 
     // Epic:0.5,0,0.6 or BP:0.5,0.5,0.5,1.0,0.5,0.5,0.5,1.0
@@ -217,20 +253,21 @@ int FinalSceneObject::ParseShader(const std::string& field,          // input pa
 
     if (colon_pos == std::string::npos)
     {
-        std::cerr << "Error: Malformatted shader_type specification " << field << std::endl;
+        std::cerr << "Error: Malformatted material_type specification " << field << std::endl;
         exit(1);
     }
 
     // Check which shader this is
-    std::string shader_spec = field.substr(0, colon_pos);
+    std::string material_spec = field.substr(0, colon_pos);
 
     int retval = -1;
-    if (shader_spec == "Epic")
+    if (material_spec == "Epic")
     {
         // Set what we know
-        shader_type = ShaderType::Epic;
-        bp_diffuse = glm::vec4(-1.f, -1.f, -1.f, -1.f);
-        bp_specular = glm::vec4(-1.f, -1.f, -1.f, -1.f);
+        material_type = MaterialType::Epic;
+        bp_diffuse = glm::vec3(-1.f, -1.f, -1.f);
+        bp_specular = glm::vec3(-1.f, -1.f, -1.f);
+        (*bp_shininess) = -1.f;
 
         // Process Epic parameters
         std::string epic_params(field.substr(colon_pos + 1));
@@ -240,10 +277,10 @@ int FinalSceneObject::ParseShader(const std::string& field,          // input pa
                                                    epic_roughness,
                                                    epic_specular);
     }
-    else if (shader_spec == "BP")
+    else if (material_spec == "BP")
     {
         // Set what we know
-        shader_type = ShaderType::BP;
+        material_type = MaterialType::BP;
         (*epic_metallic) = -1;
         (*epic_roughness) = -1;
         (*epic_specular) = -1;
@@ -252,11 +289,12 @@ int FinalSceneObject::ParseShader(const std::string& field,          // input pa
 
         retval = FinalSceneObject::ParseBPParams(bp_params,
                                                  bp_diffuse,
-                                                 bp_specular);
+                                                 bp_specular,
+                                                 bp_shininess);
     }
     else
     {
-        std::cerr << "Error: Unrecognized shader specification " << shader_spec << std::endl;
+        std::cerr << "Error: Unrecognized shader specification " << material_spec << std::endl;
         exit(1);
     }
 
@@ -298,49 +336,49 @@ int FinalSceneObject::ParseEpicParams(const std::string& epic_params, // input p
 
 // returns 0 on success
 int FinalSceneObject::ParseBPParams(const std::string& bp_params, // input parameter
-                                    glm::vec4 &bp_diffuse,        // output parameter
-                                    glm::vec4 &bp_specular)    // output parameter
+                                    glm::vec3 &bp_diffuse,        // output parameter
+                                    glm::vec3 &bp_specular,
+                                    float* bp_shininess)    // output parameter
 {
-    // Collect the 4 parameters for each vec4, 4 * 2 = 8 
-    int n = 8;
+    // Collect the 3 parameters for each vec3 3 * 2 = 6  
+    // and the shininess giving us a total of 6 + 1 = 7
+    int n = 7;
     
     std::string::size_type sub_pos = 0;
     float v1 = -1;
     float v2 = -1;
     float v3 = -1;
-    float v4 = -1;
     for (int i = 0; i < n; i++)
     {
         float param = -1;
         sub_pos += ReadFloat(bp_params.substr(sub_pos), &param) + 1;
 
-        if ( i == 0 || (i == n - 4) )
+        if ( i == 0 || (i == 3) )
         {
             v1 = param;
         }
-        else if ( i == 1 || (i == n - 3) )
+        else if ( i == 1 || (i == 4) )
         {
             v2 = param;
         }
-        else if ( i == 2 || (i == n - 2) )
+        else if ( i == 2 || (i == 5) )
         {
             v3 = param;
-        }
-        else if ( i == 3 || (i == n - 1) )
-        {
-            v4 = param;
-            if (i == 3)
+            if (i == 2)
             {
-                bp_diffuse = glm::vec4(v1, v2, v3, v4);
+                bp_diffuse = glm::vec3(v1, v2, v3);
                 v1 = -1;
                 v2 = -1;
                 v3 = -1;
-                v4 = -1;
             }
-            else if (i == n - 1)
+            else if (i == 5)
             {
-                bp_specular = glm::vec4(v1, v2, v3, v4);
+                bp_specular = glm::vec3(v1, v2, v3);
             }
+        }
+        else if ( i == 6 )
+        {
+            (*bp_shininess) = param;
         }
     }
 
@@ -408,15 +446,6 @@ int FinalSceneObject::ParseRotations(const std::string& r_params,
     return 0;
 }
 
-// Returns 0 on success
-int FinalSceneObject::ParseScale(const std::string& scale_param,
-                                 float* scale)
-{
-    float param = std::stof(scale_param);
-    (*scale) = param;
-    return 0;
-}
-
 void FinalSceneObject::PrintContainer(const std::vector<FinalSceneObject>& final_scene_objects)
 {
     std::cout << "container.size(): " << final_scene_objects.size() << std::endl;
@@ -428,29 +457,29 @@ void FinalSceneObject::PrintContainer(const std::vector<FinalSceneObject>& final
 
 std::ostream& operator<< (std::ostream& os, const FinalSceneObject& fso)
 {
-    std::string shader = "None";
-    switch(fso.shader_type)
+    std::string material = "None";
+    switch(fso.material_type)
     {
-        case (FinalSceneObject::ShaderType::Epic):
+        case (FinalSceneObject::MaterialType::Epic):
 
-            shader = "Epic";
+            material = "Epic";
             break;
 
-        case (FinalSceneObject::ShaderType::BP):
+        case (FinalSceneObject::MaterialType::BP):
 
-            shader = "BP";
+            material = "BP";
             break;
 
-        case (FinalSceneObject::ShaderType::None):
+        case (FinalSceneObject::MaterialType::None):
 
-            shader = "None";
+            material = "None";
             break;
     }
 
     os << "name: "            << fso.name
        << " description: "    << fso.description
        << " texture: "        << fso.texture
-       << " shader: "         << shader
+       << " material: "       << material
        << " epic_metallic: "  << fso.epic_metallic
        << " epic_roughness: " << fso.epic_roughness
        << " epic_specular: "  << fso.epic_specular
