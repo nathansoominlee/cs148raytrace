@@ -102,7 +102,7 @@ std::shared_ptr<Scene> Assignment6::CreateSceneFromSheet() const
     */
 
     glm::vec4 color(1.f, 1.f, 1.f, 1.f);
-    glm::vec3 position(0.f, 2.8f, 0.f);
+    glm::vec3 position(0.f, 3.f, 10.f);
     Utility::AddPLight(color, position, scene);
 
     std::cout << "Returning new scene..." << std::endl;
@@ -211,5 +211,6 @@ int Assignment6::GetMaxRefractionBounces() const
 
 glm::vec2 Assignment6::GetImageOutputResolution() const
 {
-    return glm::vec2(640.f, 480.f);
+    //return glm::vec2(640.f, 480.f);
+    return glm::vec2(1280.f, 720.f);
 }
