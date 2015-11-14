@@ -36,6 +36,13 @@ endif()
 
 message(STATUS "Generating buildfiles for ${MYNAME}'s machine, ${HOSTNAME}")
 
+# If we are on a linux machine then Mike wants to use openmp
+if (NOT WIN32)
+    if (NOT APPLE)
+        set(GCC_OMP_FLAG "-fopenmp")
+    endif()
+endif()
+
 # Import utility cmake scripts...mainly useful for Linux systems since we provide
 # the external libraries elsewhere.
 if (NOT WIN32 AND NOT APPLE)
@@ -49,7 +56,13 @@ endif()
 
 # CPP Flags
 if (NOT WIN32)
-	set(CXX_FLAGS "-Wall -std=c++11 -Wno-missing-braces")
+    set(CXX_FLAGS "-Wall -std=c++11 -Wno-missing-braces ${GCC_OMP_FLAG}")
+
+    # must give omp flag to the linker otherwise it will show up in
+    #    CMakeFiles/cs148raytracer.dir/flags.make  but not in
+    #    CMakeFiles/cs148raytracer.dir/link.txt    and therefore won't make it to link line
+    # causing undefined reference errors, e.g. "undefined reference to `GOMP_parallel'"
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_OMP_FLAG}")
 endif()
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
