@@ -12,8 +12,7 @@ class FinalSceneObject : public SceneObject
 public:
 
     // Factory function to create a collection from the google sheet
-    static int MakeContainer(const Rows &rows,                              // input parameter
-                      std::vector<FinalSceneObject>& final_scene_objects);  // output parameter
+    static std::vector<FinalSceneObject> MakeContainer(const Rows &rows); 
 
     // Print function for the created container
     static void PrintContainer(const std::vector<FinalSceneObject>& final_scene_objects);

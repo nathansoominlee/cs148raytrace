@@ -10,7 +10,7 @@ class Utility
 
 public:
 
-    static void AddPLight(glm::vec4 color, glm::vec3 position, std::shared_ptr<Scene> scene);
+    static void AddPLight(glm::vec3 color, glm::vec3 position, std::shared_ptr<Scene> scene);
 
     //static std::shared_ptr<EpicShader> MakeEpicShader(float metallic, float roughness, float specular, std::string texture);
 

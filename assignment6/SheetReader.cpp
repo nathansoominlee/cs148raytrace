@@ -1,37 +1,24 @@
 #include "assignment6/SheetReader.h"
 
-int SheetReader::ImportSheet(std::string sheet, // input parameter
-                             Rows &rows)        // output parameter
+Rows SheetReader::ImportSheet(const std::string &sheet_URL, const std::string &sheet_PATH, bool use_cached_sheet)
 {
-    std::string fname;
-
-    if (sheet.substr(0, 5) == "https")
+    if (use_cached_sheet)
     {
-        fname = DownloadSheet(sheet);
-        if (fname == "")
-        {
-            std::cerr << "Error: Failed downloading sheet " + sheet + ". Returning nullptr" << std::endl;
-            return -1;
-        }
-    }
-    else if(sheet.substr(sheet.length() - 4) == ".tsv")
-    {
-        fname = sheet;
+        // make sure it's a .tsv file
+        assert(sheet_PATH.substr(sheet.length() - 4) == ".tsv");
+        return std::move(ParseTSV(sheet_PATH));
     }
     else
     {
-        std::cerr << "Error: Expected https URL or .tsv file for sheet. Returning nullptr" << std::endl;
-        return -1;
+        // make sure it's a URL
+        assert(sheet_URL.substr(0, 5) == "https");
+        DownloadSheet(sheet_URL, sheet_PATH);
+        return std::move(ParseTSV(sheet_PATH));
     }
-
-    rows = ParseTSV(fname);
-    
-    return 0; 
-
 }
 
 // Reads TSV line by line and extracts fields
-Rows SheetReader::ParseTSV(std::string fname)
+Rows SheetReader::ParseTSV(const std::string &fname)
 {
     Rows rows;
 
@@ -66,7 +53,7 @@ Rows SheetReader::ParseTSV(std::string fname)
 }
 
 
-std::string SheetReader::DownloadSheet(std::string sheet)
+void SheetReader::DownloadSheet(const std::string &sheet_URL, const std::string &sheet_PATH)
 {
     // check for curl
     std::string cmd = "curl --version > /dev/null 2>&1";
@@ -75,20 +62,17 @@ std::string SheetReader::DownloadSheet(std::string sheet)
     {
         std::cerr << "Error: curl is missing, " + cmd + " returned non-zero exit code " 
             + std::to_string(retval)<< std::endl;
-        return "";
+        exit(retval);
     }
 
     // download sheet
-    std::string fname = "final_scene_sheet.tsv";
-    cmd = "curl -sk " + sheet + " > " + fname;
+    cmd = "curl -sk " + sheet_URL + " > " + sheet_PATH;
 
     retval = system(cmd.c_str());
 
     if (retval)
     {
         std::cerr << "Error: " + cmd + " returned non-zero exit code " + std::to_string(retval) << std::endl;
-        return "";
+        exit(retval);
     }
-
-    return fname;
 }

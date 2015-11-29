@@ -1,9 +1,8 @@
 #include "assignment6/Utility.h"
-
 #include "common/Utility/Mesh/Loading/MeshLoader.h"
 #include "common/Utility/Texture/TextureLoader.h"
 
-void Utility::AddPLight(glm::vec4 color, glm::vec3 position, std::shared_ptr<Scene> scene)
+void Utility::AddPLight(glm::vec3 color, glm::vec3 position, std::shared_ptr<Scene> scene)
 {
     // turn on point light.
     std::shared_ptr<Light> pointLight = std::make_shared<PointLight>();
@@ -13,30 +12,6 @@ void Utility::AddPLight(glm::vec4 color, glm::vec3 position, std::shared_ptr<Sce
 
     scene->AddLight(pointLight);
 }
-
-/* Returns an epic shader with the given parameters
-// and texture. Any objects with different parameter/textures
-// need different shaders.
-std::shared_ptr<EpicShader> Utility::MakeEpicShader(float metallic, float roughness, float specular, std::string texture)
-{
-    std::unordered_map<GLenum, std::string> shaderSpec = { 
-        { GL_VERTEX_SHADER, "brdf/epicshader/frag/noSubroutine/epicshader.vert" },
-        { GL_FRAGMENT_SHADER, "brdf/epicshader/frag/noSubroutine/epicshader.frag"}
-    };  
-
-    std::shared_ptr<EpicShader> shader = std::make_shared<EpicShader>(shaderSpec, GL_FRAGMENT_SHADER);
-    shader->SetMetallic(metallic);
-    shader->SetRoughness(roughness);
-    shader->SetSpecular(specular);
-
-    if (!texture.empty())
-    {   
-        shader->SetTexture(EpicShader::TextureSlots::DIFFUSE, TextureLoader::LoadTexture(texture));
-    }   
-
-    return shader;
-}
-*/
 
 // Make the BP material using args as parameters
 std::shared_ptr<BlinnPhongMaterial> Utility::MakeBlinnPhongMaterial(glm::vec3 diffuse, glm::vec3 specular, float shininess, 

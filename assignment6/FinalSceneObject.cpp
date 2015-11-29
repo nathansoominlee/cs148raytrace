@@ -19,9 +19,10 @@
 // Which we have have in rows and need to turn into a container of FinalSceneObjects
 
 // Driver function for ParseSFO
-int FinalSceneObject::MakeContainer(const Rows &rows,                      // input parameter
-                      std::vector<FinalSceneObject> &final_scene_objects)  // output parameter
+std::vector<FinalSceneObject> FinalSceneObject::MakeContainer(const Rows &rows)
 {
+    std::vector<FinalSceneObject> final_scene_objects;
+
     // r = 1 skips the first row of headers
     for (int r = 1; r < (int) rows.size(); r++)
     {
@@ -48,7 +49,7 @@ int FinalSceneObject::MakeContainer(const Rows &rows,                      // in
 
     } // for j
 
-    return 0;
+    return std::move(final_scene_objects);
 
 } // FinalSceneObject::MakeContainer()
 

@@ -19,16 +19,24 @@ public:
 
 private:
 //https://docs.google.com/spreadsheets/d/1U00wnt888PKLGEc6vnDlIguzLnzOWJGJXCjst0bIE3s/pub?output=tsv
+//https://docs.google.com/spreadsheets/d/1U00wnt888PKLGEc6vnDlIguzLnzOWJGJXCjst0bIE3s/pub?output=tsv&gid=1923272220
     const std::string baseURL = 
         "https://docs.google.com/spreadsheets/d/";
     const std::string key = 
         "1U00wnt888PKLGEc6vnDlIguzLnzOWJGJXCjst0bIE3s";
     const std::string fmt = 
         "/pub?output=tsv"; // tab-separated values
+    const std::string gid_objects =
+        "&gid=0";
+    const std::string gid_lights =
+        "&gid=1923272220";
 
 
-    const std::string sheetURL = baseURL + key + fmt;
-    const std::string sheet_path = "final_scene_sheet.tsv";
+    const std::string objects_URL = "\"" + baseURL + key + fmt + gid_objects + "\"";
+    const std::string lights_URL =  "\"" + baseURL + key + fmt + gid_lights + "\"";
+    const std::string objects_PATH = "objects.tsv";
+    const std::string lights_PATH = "lights.tsv";
+
 	const std::string sheet_path_local = "C:/Users/natha/Downloads/scene_scanline.tsv";
 
 };
