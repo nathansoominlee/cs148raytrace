@@ -2,6 +2,13 @@
 #include "common/Utility/Mesh/Loading/MeshLoader.h"
 #include "common/Utility/Texture/TextureLoader.h"
 
+// need class def'n of Texture2D for material->SetTexture() calls
+// to compile otherwise get "no matching function call" due to
+// Texture2D for 2nd argument when Texture type required
+// Read more here
+// http://stackoverflow.com/questions/15247318/unable-to-pass-a-subclass-instance-as-argument-instead-of-superclass
+#include "common/Rendering/Textures/Texture2D.h" 
+
 void Utility::AddPLight(glm::vec3 color, glm::vec3 position, std::shared_ptr<Scene> scene)
 {
     // turn on point light.
@@ -28,6 +35,13 @@ std::shared_ptr<BlinnPhongMaterial> Utility::MakeBlinnPhongMaterial(glm::vec3 di
     material->SetReflectivity(reflectivity);
     material->SetTransmittance(1 - transparency);
     material->SetIOR(IOR);
+
+    if (!texture.empty())
+    {
+        // material texture
+        material->SetTexture("diffuseTexture", TextureLoader::LoadTexture(texture));
+        material->SetTexture("specularTexture", TextureLoader::LoadTexture(texture));
+    }
 
     return material;
 }

@@ -123,9 +123,9 @@ FinalSceneLight FinalSceneLight::ParseFSL(std::vector<std::string> row)
 
 void FinalSceneLight::AddContainer(const std::vector<FinalSceneLight>& final_scene_lights, std::shared_ptr<Scene> scene)
 {
-    // TODO: finish converting this from FSO to FSL*****
     for (auto fsl : final_scene_lights)
     {
+        std::cout << "Adding " << fsl.name << " to scene..." << std::endl;
 
         switch (fsl.light_type)
         {

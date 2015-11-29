@@ -166,6 +166,8 @@ void FinalSceneObject::AddContainer(const std::vector<FinalSceneObject>& final_s
 {
     for (auto fso : final_scene_objects)
     {
+        std::cout << "Adding " << fso.name << " to scene..." << std::endl;
+
         // Get the material properties of the object
         std::shared_ptr<class Material> material = fso.MakeMaterial();
 
