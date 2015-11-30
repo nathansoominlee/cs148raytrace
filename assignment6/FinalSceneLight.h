@@ -33,7 +33,7 @@ private:
                  Transformations = 5
                 };
 
-    enum class LightType { None, Point };
+    enum class LightType { None, PointAttenuated, PointUnattenuated };
 
     FinalSceneLight(std::string name, 
                     std::string description, 

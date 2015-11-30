@@ -9,13 +9,14 @@
 // http://stackoverflow.com/questions/15247318/unable-to-pass-a-subclass-instance-as-argument-instead-of-superclass
 #include "common/Rendering/Textures/Texture2D.h" 
 
-void Utility::AddPLight(glm::vec3 color, glm::vec3 position, std::shared_ptr<Scene> scene)
+void Utility::AddPLight(glm::vec3 color, glm::vec3 position, bool isAttenuated, std::shared_ptr<Scene> scene)
 {
     // turn on point light.
-    std::shared_ptr<Light> pointLight = std::make_shared<PointLight>();
+    std::shared_ptr<PointLight> pointLight = std::make_shared<PointLight>();
 
     pointLight->SetLightColor(glm::vec3(color));
     pointLight->SetPosition(position);
+    pointLight->SetAttenuation(isAttenuated);
 
     scene->AddLight(pointLight);
 }

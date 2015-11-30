@@ -92,9 +92,13 @@ FinalSceneLight FinalSceneLight::ParseFSL(std::vector<std::string> row)
 
             case(Column::Type):
 
-                if (field == "Point")
+                if (field == "PointAttenuated")
                 {
-                    light_type = FinalSceneLight::LightType::Point;
+                    light_type = FinalSceneLight::LightType::PointAttenuated;
+                }
+                else if (field == "PointUnattenuated")
+                {
+                    light_type = FinalSceneLight::LightType::PointUnattenuated;
                 }
                 else
                 {
@@ -129,11 +133,13 @@ void FinalSceneLight::AddContainer(const std::vector<FinalSceneLight>& final_sce
 
         switch (fsl.light_type)
         {
-            case FinalSceneLight::LightType::Point:
+            case FinalSceneLight::LightType::PointAttenuated:
+            case FinalSceneLight::LightType::PointUnattenuated:
             {
+                bool isAttenuated = fsl.light_type == FinalSceneLight::LightType::PointAttenuated ? true : false;
                 glm::vec3 color(fsl.red, fsl.green, fsl.blue);
                 glm::vec3 position(fsl.tx, fsl.ty, fsl.tz);
-                Utility::AddPLight(color, position, scene);
+                Utility::AddPLight(color, position, isAttenuated, scene);
                 break;
             }
             case FinalSceneLight::LightType::None:
@@ -213,9 +219,14 @@ std::ostream& operator<< (std::ostream& os, const FinalSceneLight& fsl)
     std::string light = "None";
     switch(fsl.light_type)
     {
-        case (FinalSceneLight::LightType::Point):
+        case (FinalSceneLight::LightType::PointAttenuated):
 
-            light = "Point";
+            light = "PointAttenuated";
+            break;
+        
+        case (FinalSceneLight::LightType::PointUnattenuated):
+
+            light = "PointUnattenuated";
             break;
 
         case (FinalSceneLight::LightType::None):

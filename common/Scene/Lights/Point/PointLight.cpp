@@ -12,14 +12,19 @@ void PointLight::ComputeSampleRays(std::vector<Ray>& output, glm::vec3 origin, g
 
 float PointLight::ComputeLightAttenuation(glm::vec3 origin) const
 {
-    //return 1.f;
     
+    if (this->isAttenuated)
+    {
+        // Return a value betwen 0 and 1 for attenuation factor,
+        // intensity for a point light falls off as 1 / d ** 2
 
-    // Return a value betwen 0 and 1 for attenuation factor,
-    // intensity for a point light falls off as 1 / d ** 2
-
-    const glm::vec3 lightPosition = glm::vec3(GetPosition());
-    const float dist = glm::distance(lightPosition, origin);
-    const float exponent = 1.1;
-    return 1.f / pow(1.f + dist, exponent);
+        const glm::vec3 lightPosition = glm::vec3(GetPosition());
+        const float dist = glm::distance(lightPosition, origin);
+        const float exponent = 1.1;
+        return 1.f / pow(1.f + dist, exponent);
+    }
+    else
+    {
+        return 1.f;
+    }
 }
