@@ -23,7 +23,7 @@ public:
 private:
 
 // The column data looks like this
-// Parse? object description texture material:p1,p2,... reflectivity transparency IOR scale transformations:tx,ty,tz rotations:rx,ry,rz
+// Parse? object description texture material:p1,p2,... reflectivity opacity IOR scale transformations:tx,ty,tz rotations:rx,ry,rz
 
     enum Column {TryToParse      = 0,
                  Object          = 1,
@@ -31,7 +31,7 @@ private:
                  Texture         = 3,
                  Material        = 4,
                  Reflectivity    = 5,
-                 Transparency    = 6,
+                 Opacity         = 6,
                  IoR             = 7,
                  Scale           = 8,
                  Transformations = 9,
@@ -51,7 +51,7 @@ private:
                      glm::vec3 bp_specular,
                      float bp_shininess,
                      float reflectivity,
-                     float transparency,
+                     float opacity,
                      float IOR,
                      float scale,
                      float tx,
@@ -71,7 +71,7 @@ private:
         bp_specular(bp_specular),
         bp_shininess(bp_shininess),
         reflectivity(reflectivity),
-        transparency(transparency),
+        opacity(opacity),
         IOR(IOR),
         scale(scale),
         tx(tx),
@@ -132,7 +132,7 @@ private:
     glm::vec3 bp_specular;
     float bp_shininess;
     float reflectivity;
-    float transparency;
+    float opacity;
     float IOR;
     float scale;
     float tx;

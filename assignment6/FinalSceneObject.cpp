@@ -76,7 +76,7 @@ FinalSceneObject FinalSceneObject::ParseFSO(std::vector<std::string> row)
     glm::vec3 bp_specular = glm::vec3(-1.f, -1.f, -1.f);
     float bp_shininess = -1.f;
     float reflectivity = -1.f;
-    float transparency = -1.f;
+    float opacity = -1.f;
     float IOR = -1.f;
     float scale = -1.f;
     float tx = -1.f;
@@ -134,8 +134,8 @@ FinalSceneObject FinalSceneObject::ParseFSO(std::vector<std::string> row)
             case(Column::Reflectivity):
                 ReadFloat(field, &reflectivity);
                 break;
-            case(Column::Transparency):
-                ReadFloat(field, &transparency);
+            case(Column::Opacity):
+                ReadFloat(field, &opacity);
                 break;
             case(Column::IoR):
                 ReadFloat(field, &IOR);
@@ -156,7 +156,7 @@ FinalSceneObject FinalSceneObject::ParseFSO(std::vector<std::string> row)
     // Build and return the object
     FinalSceneObject fso(name, description, texture, material_type, \
                     epic_metallic, epic_roughness, epic_specular, bp_diffuse, bp_specular, bp_shininess, \
-                    reflectivity, transparency, IOR, scale, tx, ty, tz, rx, ry, rz);
+                    reflectivity, opacity, IOR, scale, tx, ty, tz, rx, ry, rz);
 
     return fso;
 
@@ -228,7 +228,7 @@ std::shared_ptr<class Material> FinalSceneObject::MakeMaterial()
 
         case (MaterialType::BP):
             return Utility::MakeBlinnPhongMaterial(this->bp_diffuse, this->bp_specular, this->bp_shininess, 
-                    this->reflectivity, this->transparency, this->IOR, texture_path);
+                    this->reflectivity, this->opacity, this->IOR, texture_path);
 
         case (MaterialType::None):
             std::cerr << "MakeMaterial: Don't know how to make None shader type." << std::endl;

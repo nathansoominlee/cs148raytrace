@@ -41,7 +41,7 @@ void RayTracer::Run()
 
     std::cout << "Beginning raytracer loop..." << std::endl;
 
-    #pragma omp parallel for
+    //#pragma omp parallel for
     for (int r = 0; r < static_cast<int>(currentResolution.y); ++r) {
         for (int c = 0; c < static_cast<int>(currentResolution.x); ++c) {
             imageWriter.SetPixelColor(currentSampler->ComputeSamplesAndColor(maxSamplesPerPixel, 2, [&](glm::vec3 inputSample) {

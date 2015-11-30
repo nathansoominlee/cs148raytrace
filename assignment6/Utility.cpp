@@ -22,7 +22,7 @@ void Utility::AddPLight(glm::vec3 color, glm::vec3 position, std::shared_ptr<Sce
 
 // Make the BP material using args as parameters
 std::shared_ptr<BlinnPhongMaterial> Utility::MakeBlinnPhongMaterial(glm::vec3 diffuse, glm::vec3 specular, float shininess, 
-                        float reflectivity, float transparency, float IOR, std::string texture)
+                        float reflectivity, float opacity, float IOR, std::string texture)
 {
     
     std::shared_ptr<BlinnPhongMaterial> material = std::make_shared<BlinnPhongMaterial>();
@@ -33,7 +33,7 @@ std::shared_ptr<BlinnPhongMaterial> Utility::MakeBlinnPhongMaterial(glm::vec3 di
 
     // Material general properties
     material->SetReflectivity(reflectivity);
-    material->SetTransmittance(1 - transparency);
+    material->SetTransmittance(1 - opacity);
     material->SetIOR(IOR);
 
     if (!texture.empty())
