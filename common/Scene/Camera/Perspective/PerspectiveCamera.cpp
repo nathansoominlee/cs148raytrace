@@ -25,7 +25,19 @@ std::shared_ptr<Ray> PerspectiveCamera::GenerateRayForNormalizedCoordinates(glm:
     const glm::vec3 targetPosition = rayOrigin + glm::vec3(GetForwardDirection()) + glm::vec3(GetRightDirection()) * xOffset + glm::vec3(GetUpDirection()) * yOffset;
 
     const glm::vec3 rayDirection = glm::normalize(targetPosition - rayOrigin);
-    return std::make_shared<Ray>(rayOrigin + rayDirection * zNear, rayDirection, zFar - zNear);
+
+	if (!depthOfFieldEnabled)	
+		return std::make_shared<Ray>(rayOrigin + rayDirection * zNear, rayDirection, zFar - zNear);
+	else {
+
+		float randXOffset = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / lensRadius));
+		float randYOffset = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / lensRadius));
+		const glm::vec3 newRayOrigin = glm::vec3(GetPosition()) + glm::vec3(GetRightDirection()) * randXOffset + glm::vec3(GetUpDirection()) * randYOffset;	// position of the randomly generated origin of ray on the aperature. it's currently a square. look into changing it to a circle later.
+		const glm::vec3 newTargetPosition = rayDirection*zFocalPlane;	// position of the focal point.
+		const glm::vec3 newRayDirection = glm::normalize(newTargetPosition - newRayOrigin);
+		return std::make_shared<Ray>(newRayOrigin + newRayDirection * zNear, newRayDirection, zFar - zNear);
+	}
+
 }
 
 void PerspectiveCamera::SetZNear(float input)
