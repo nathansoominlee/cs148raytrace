@@ -46,7 +46,7 @@ std::shared_ptr<Scene> Assignment8::CreateScene() const
 std::shared_ptr<ColorSampler> Assignment8::CreateSampler() const
 {
     std::shared_ptr<JitterColorSampler> jitter = std::make_shared<JitterColorSampler>();
-    jitter->SetGridSize(glm::ivec3(1, 1, 1));
+    jitter->SetGridSize(glm::ivec3(5, 5, 2));
     return jitter;
 }
 
