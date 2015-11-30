@@ -30,9 +30,12 @@ std::shared_ptr<Ray> PerspectiveCamera::GenerateRayForNormalizedCoordinates(glm:
 		return std::make_shared<Ray>(rayOrigin + rayDirection * zNear, rayDirection, zFar - zNear);
 	else {
 
-		float randXOffset = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / lensRadius));
-		float randYOffset = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / lensRadius));
-		const glm::vec3 newRayOrigin = glm::vec3(GetPosition()) + glm::vec3(GetRightDirection()) * randXOffset + glm::vec3(GetUpDirection()) * randYOffset;	// position of the randomly generated origin of ray on the aperature. it's currently a square. look into changing it to a circle later.
+		float randXOffset = -lensRadius + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (lensRadius + lensRadius)));
+		float maxYOffset = sqrt(lensRadius*lensRadius- randXOffset*randXOffset); // pythagorian.
+		float randYOffset = -maxYOffset + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (maxYOffset + maxYOffset)));
+
+
+		const glm::vec3 newRayOrigin = glm::vec3(GetPosition()) + glm::vec3(GetRightDirection()) * randXOffset + glm::vec3(GetUpDirection()) * randYOffset;
 
 		const float newPlaneHeight = std::tan(fov / 2.f) * 2.f *zFocalPlane;
 		const float newPlaneWidth = newPlaneHeight * aspectRatio;

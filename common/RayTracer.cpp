@@ -80,9 +80,9 @@ void RayTracer::Run()
 					glm::vec2 normalizedCoordinates(static_cast<float>(c) + sampleOffset.x, static_cast<float>(r) + sampleOffset.y);
 					normalizedCoordinates /= currentResolution;
 
-					const int nSamples = 32;	// edit to change detail
+					const int nSamples = storedApplication->GetNDepthOfFieldRays();	// number of rays shooting out from the aperature per image pixel.
 
-					// array of colors, later used to average
+					// array of added rgb values, later used to average
 					glm::vec3 averagedColor;
 
 					for (int i = 0; i < nSamples; i++) {
@@ -101,7 +101,7 @@ void RayTracer::Run()
 						averagedColor += sampleColor;
 					}
 
-					averagedColor /= nSamples;
+					averagedColor /= nSamples;	// average.
 					return averagedColor;
 				}), c, r);
 

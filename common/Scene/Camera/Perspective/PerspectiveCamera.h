@@ -21,8 +21,8 @@ private:
 
 	// depth of field variables. 
 	// modify the constant values to change the rendering.
-	const float zFocalPlane = 3.5f;
-	const float lensRadius = 0.05F;
+	const float zFocalPlane = 3.45f;
+	const float lensRadius = 0.065F;
 	const int nRaysFromLens = 16; // not used here. should be used in RayTracer.cpp.
 
 };

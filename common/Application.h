@@ -31,6 +31,7 @@ public:
 
 	// Depth of Field
 	virtual bool EnableDOF() const;
+	virtual int GetNDepthOfFieldRays() const;
 
     virtual std::string GetOutputFilename() const;
 private:
