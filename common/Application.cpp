@@ -2,6 +2,11 @@
 #include "common/Acceleration/AccelerationCommon.h"
 #include "common/Output/ImageWriter.h"
 
+bool Application::EnableDOF() const
+{
+	return true;
+}
+
 std::string Application::GetOutputFilename() const
 {
     return "output.png";

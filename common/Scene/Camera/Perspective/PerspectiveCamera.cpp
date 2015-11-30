@@ -6,7 +6,7 @@ PerspectiveCamera::PerspectiveCamera(float aspectRatio, float inputFov):
 {
 }
 
-std::shared_ptr<Ray> PerspectiveCamera::GenerateRayForNormalizedCoordinates(glm::vec2 coordinate) const
+std::shared_ptr<Ray> PerspectiveCamera::GenerateRayForNormalizedCoordinates(glm::vec2 coordinate, bool depthOfFieldEnabled) const
 {
     // Send ray from the camera to the image plane -- make the assumption that the image plane is at z = 1 in camera space.
     const glm::vec3 rayOrigin = glm::vec3(GetPosition());
