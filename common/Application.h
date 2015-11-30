@@ -23,7 +23,14 @@ public:
     // Sampling Properties
     virtual int GetSamplesPerPixel() const;
 
-    // whether or not to continue sampling the scene from the camera.
+    // Depth of Field
+	virtual bool DepthOfFieldEnabled() const;	// 1 for enabled. 0 for disabled.
+	virtual int GetNumRaysFromLens() const;
+	virtual float GetFocalPlaneDistanceFromLens() const;
+	virtual float GetImagePlaneDistanceFromLens() const;
+
+	
+	// whether or not to continue sampling the scene from the camera.
     virtual bool NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleIndex) = 0;
 
     // Postprocessing
