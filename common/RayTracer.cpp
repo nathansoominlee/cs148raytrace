@@ -7,9 +7,10 @@
 #include "common/Sampling/ColorSampler.h"
 #include "common/Output/ImageWriter.h"
 #include "common/Rendering/Renderer.h"
-
 #include "common/Scene/Geometry/Primitives/Triangle/Triangle.h"
-RayTracer::RayTracer(std::unique_ptr<class Application> app):
+#include "assignment6/Utility.h"
+
+RayTracer::RayTracer(std::unique_ptr<class Assignment6> app):
     storedApplication(std::move(app))
 {
 }
@@ -41,9 +42,21 @@ void RayTracer::Run()
 
     std::cout << "Beginning raytracer loop..." << std::endl;
 
+    int start_r = 0;
+    int end_r = currentResolution.y;
+
+    int start_c = 0;
+    int end_c = currentResolution.x;
+
+    if (storedApplication->ChunkingRequested())
+    {
+        Utility::CalculateChunk(currentResolution.y, currentResolution.x, storedApplication->GetCurrentChunk(),
+                storedApplication->GetTotalChunks(), start_r, end_r, start_c, end_c);
+    }
+
     //#pragma omp parallel for
-    for (int r = 0; r < static_cast<int>(currentResolution.y); ++r) {
-        for (int c = 0; c < static_cast<int>(currentResolution.x); ++c) {
+    for (int r = start_r; r < end_r; ++r) {
+        for (int c = start_c; c < end_c; ++c) {
             imageWriter.SetPixelColor(currentSampler->ComputeSamplesAndColor(maxSamplesPerPixel, 2, [&](glm::vec3 inputSample) {
                 const glm::vec3 minRange(-0.5f, -0.5f, 0.f);
                 const glm::vec3 maxRange(0.5f, 0.5f, 0.f);

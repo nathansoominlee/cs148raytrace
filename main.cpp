@@ -23,14 +23,27 @@
 
 int main(int argc, char** argv)  
 {
-    std::unique_ptr<APPLICATION> currentApplication = make_unique<APPLICATION>();
-    RayTracer rayTracer(std::move(currentApplication));
 
-    DIAGNOSTICS_TIMER(timer, "Ray Tracer");
-    rayTracer.Run();
-    DIAGNOSTICS_END_TIMER(timer);
+    CommandLineArgs args(argc, argv);
 
-    DIAGNOSTICS_PRINT();
+    if (args.ChunkComposeRequested())
+    {
+        // User wants to compose output files
+        std::cerr << "Error: Compose output files not implemented." << std::endl;
+        exit(1);
+    }
+    else 
+    {
+        // User wants to run raytracer
+        std::unique_ptr<Assignment6> currentApplication = make_unique<Assignment6>(args);
+        RayTracer rayTracer(std::move(currentApplication));
+
+        DIAGNOSTICS_TIMER(timer, "Ray Tracer");
+        rayTracer.Run();
+        DIAGNOSTICS_END_TIMER(timer);
+
+        DIAGNOSTICS_PRINT();
+    }
 
 #if defined(_WIN32) && WAIT_ON_EXIT
     int exit = 0;

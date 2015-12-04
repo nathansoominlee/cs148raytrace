@@ -5,13 +5,13 @@ Rows SheetReader::ImportSheet(const std::string &sheet_URL, const std::string &s
     if (use_cached_sheet)
     {
         // make sure it's a .tsv file
-        assert(sheet_PATH.substr(sheet.length() - 4) == ".tsv");
+        assert(sheet_PATH.substr(sheet_PATH.length() - 4) == ".tsv");
         return std::move(ParseTSV(sheet_PATH));
     }
     else
     {
         // make sure it's a URL
-        assert(sheet_URL.substr(0, 5) == "https");
+        assert(sheet_URL.substr(1, 5) == "https");
         DownloadSheet(sheet_URL, sheet_PATH);
         return std::move(ParseTSV(sheet_PATH));
     }

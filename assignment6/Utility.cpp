@@ -75,3 +75,19 @@ std::shared_ptr<class SceneObject> Utility::LoadObj(std::shared_ptr<class Materi
     // Return handle to scene object so caller can translate/rotate/scale it
     return sceneObject;
 }
+
+// Uses the resolution and the requested chunk to calculate the start/end offsets
+// for each of the double for loops in the ray tracer and returns those 4 values 
+// in a tuple
+void Utility::CalculateChunk(int res_y, int res_x, int chunk, int total_chunks,
+                             int &start_c, int &start_r, int &end_c, int &end_r)
+{
+    int cols_per_chunk = res_y / total_chunks;
+    int rows_per_chunk = res_x / total_chunks;
+
+    start_c = cols_per_chunk * chunk;
+    start_r = rows_per_chunk * chunk;
+
+    end_c = start_c + cols_per_chunk;
+    end_r = start_r + rows_per_chunk;
+}

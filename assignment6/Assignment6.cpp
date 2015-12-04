@@ -5,6 +5,47 @@
 #include "assignment6/FinalSceneLight.h"
 #include "assignment6/Utility.h"
 
+Assignment6::Assignment6(const CommandLineArgs &args)
+{
+    this->res_width = args.GetResWidth();
+    this->res_height = args.GetResHeight();
+
+    if (args.ChunkingRequested())
+    {
+        this->total_chunks = args.GetTotalChunks();
+        this->current_chunk = args.GetCurrentChunk();
+        this->chunking_requested = true;
+    }
+    else
+    {
+        this->total_chunks = -1;
+        this->current_chunk = -1;
+        this->chunking_requested = false;
+    }
+    this->output_filename = BuildOutputFilename(args);
+}
+
+std::string Assignment6::BuildOutputFilename(const CommandLineArgs &args)
+{
+    if (args.GetTotalChunks() == -1)
+    {
+        // The user did not request chunking
+        return std::move(args.GetOutputFilenameRoot() + ".png");
+    }
+    else
+    {
+        // The user requested chunking, so we have to append the resolution, total chunks and
+        // current chunk to the output so that we know how to compose the file
+        std::string fname = args.GetOutputFilenameRoot() + 
+                            std::to_string(args.GetResWidth()) + "x" + std::to_string(args.GetResHeight()) +
+                            "_" + std::to_string(args.GetTotalChunks()) + 
+                            "_" + std::to_string(args.GetCurrentChunk()) + 
+                            ".png"; 
+        return std::move(fname);
+    }
+
+}
+
 
 std::shared_ptr<Camera> Assignment6::CreateCamera() const
 {
@@ -96,6 +137,6 @@ int Assignment6::GetMaxRefractionBounces() const
 
 glm::vec2 Assignment6::GetImageOutputResolution() const
 {
-    //return glm::vec2(640.f, 480.f);
-    return glm::vec2(1280.f, 720.f);
+    return glm::vec2(static_cast<float>(this->res_width), 
+                     static_cast<float>(this->res_height));
 }
