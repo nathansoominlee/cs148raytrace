@@ -2,9 +2,11 @@
 #include "assignment6/Utility.h"
 #include <regex>
 
-// static initializer, cannot do inline in .h because "must be initialzed out of line" error
+// static initializers, cannot do inline in .h because "must be initialzed out of line" error
 // http://stackoverflow.com/questions/1563897/c-static-constant-string-class-member
 const std::string CommandLineArgs::DEFAULT_OUTPUT_FILENAME_ROOT = "output";
+bool CommandLineArgs::VERBOSE = false;
+bool CommandLineArgs::DIAGNOSTICS = false;
 
 CommandLineArgs::CommandLineArgs(int argc, char **argv)
 {
@@ -70,6 +72,14 @@ CommandLineArgs::CommandLineArgs(int argc, char **argv)
                 MissingArgAfter("-w", "resolution width");
             }
             this->res_width = std::stoi(argv[++i]);
+        }
+        else if (strncmp(argv[i], "-v", 3) == 0)
+        {
+            CommandLineArgs::VERBOSE = true;
+        }
+        else if (strncmp(argv[i], "-d", 3) == 0)
+        {
+            CommandLineArgs::DIAGNOSTICS = true;
         }
         else
         {
@@ -176,6 +186,8 @@ void CommandLineArgs::PrintUsage()
 {
     std::cerr << "Usages:\n" 
                  "\tcs148raytracer               Render the full scene\n" 
+                 "\tcs148raytracer -v            Print verbose output\n" 
+                 "\tcs148raytracer -d            Print diagnostics (timing + intersection counts)\n" 
                  "\tcs148raytracer -t ttt -c ccc Render the ccc/ttt chunk of the scene\n"
                  "\tcs148raytracer -h hhh        Set the resolution height\n" 
                  "\tcs148raytracer -w www        Set the resolution width\n" 

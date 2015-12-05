@@ -38,11 +38,17 @@ int main(int argc, char** argv)
         std::unique_ptr<Assignment6> currentApplication = make_unique<Assignment6>(args);
         RayTracer rayTracer(std::move(currentApplication));
 
-        DIAGNOSTICS_TIMER(timer, "Ray Tracer");
-        rayTracer.Run();
-        DIAGNOSTICS_END_TIMER(timer);
-
-        DIAGNOSTICS_PRINT();
+        if (CommandLineArgs::DIAGNOSTICS)
+        {
+            DIAGNOSTICS_TIMER(timer, "Ray Tracer");
+            rayTracer.Run();
+            DIAGNOSTICS_END_TIMER(timer);
+            DIAGNOSTICS_PRINT();
+        }
+        else
+        {
+            rayTracer.Run();
+        }
     }
 
 #if defined(_WIN32) && WAIT_ON_EXIT

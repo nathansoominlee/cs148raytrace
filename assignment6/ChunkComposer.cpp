@@ -29,19 +29,19 @@ ChunkComposer::ChunkComposer(const std::string input_filename)
     if (std::regex_search(input_filename.begin(), input_filename.end(), match, input_filename_regex))
     {
         basename = match[1];
-        std::cout << "captured basename: " << basename << std::endl;
+        Utility::Print("captured basename: ", basename, "\n");
 
         this->res_width = std::stoi(match[2]);
-        std::cout << "captured res_width: " << this->res_width << std::endl;
+        Utility::Print("captured res_width: ", this->res_width, "\n");
 
         this->res_height = std::stoi(match[3]);
-        std::cout << "captured res_height: " << this->res_height << std::endl;
+        Utility::Print("captured res_height: ", this->res_height, "\n");
 
         this->total_chunks = std::stoi(match[4]);
-        std::cout << "captured total_chunks: " << this->total_chunks << std::endl;
+        Utility::Print("captured total_chunks: ", this->total_chunks, "\n");
 
         file_ext = match[5];
-        std::cout << "captured file_ext: " << file_ext << std::endl;
+        Utility::Print("captured file_ext: ", file_ext, "\n"); 
     }
     else
     {
@@ -89,7 +89,7 @@ void ChunkComposer::ComposeChunks()
     for (int i = 0; i < (int) this->input_filenames.size(); i++)
     {
         const char *fname = this->input_filenames[i].c_str();
-        std::cout << "Processing " << fname << std::endl;
+        Utility::Print("Processing ", fname, "\n");
 
         // Copy the chunk pixels into the output bitmap, assume PNG
         FIBITMAP* in_bitmap = FreeImage_Load(fm, fname, PNG_DEFAULT);
@@ -131,7 +131,7 @@ void ChunkComposer::ComposeChunks()
         } // row
     }
 
-    std::cout << "Saving " << this->output_filename << std::endl;
+    Utility::Print("Saving ", this->output_filename, "\n");
     if (!FreeImage_Save(fm, out_bitmap, this->output_filename.c_str(), 0))
     {
                         std::cout << "Error: FreeImage_Save(" << this->output_filename << ") failed" << std::endl;

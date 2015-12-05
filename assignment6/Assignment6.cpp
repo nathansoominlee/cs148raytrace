@@ -81,14 +81,14 @@ std::shared_ptr<Scene> Assignment6::CreateSceneFromSheet() const
     Rows rows = SheetReader::ImportSheet(this->objects_URL, this->objects_PATH, use_cached_sheet);
 
     // Parse the objects
-    std::cout << "Parsing objects..." << std::endl;
+    Utility::Print("Parsing objects...", "\n");
     std::vector<FinalSceneObject> objects = FinalSceneObject::MakeContainer(rows);
 
-    std::cout << "Adding object container to scene..." << std::endl;
+    Utility::Print("Adding object container to scene...", "\n");
     FinalSceneObject::AddContainer(objects, scene);
 
     // bounding volume hierarchy
-    std::cout << "Generating acceleration data..." << std::endl;
+    Utility::Print("Generating acceleration data...", "\n");
     scene->GenerateAccelerationData(AccelerationTypes::BVH); 
 
     // Import the light sheet
@@ -96,13 +96,13 @@ std::shared_ptr<Scene> Assignment6::CreateSceneFromSheet() const
     rows = SheetReader::ImportSheet(this->lights_URL, this->lights_PATH, use_cached_sheet);
 
     // Parse the lights
-    std::cout << "Parsing lights..." << std::endl;
+    Utility::Print("Parsing lights...", "\n");
     std::vector<FinalSceneLight> lights = FinalSceneLight::MakeContainer(rows);
 
-    std::cout << "Adding light container to scene..." << std::endl;
+    Utility::Print("Adding light container to scene...", "\n");
     FinalSceneLight::AddContainer(lights, scene);
 
-    std::cout << "Returning new scene..." << std::endl;
+    Utility::Print("Returning new scene...", "\n");
     return scene;
 }
 

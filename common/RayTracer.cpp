@@ -40,7 +40,7 @@ void RayTracer::Run()
     const int maxSamplesPerPixel = storedApplication->GetSamplesPerPixel();
     assert(maxSamplesPerPixel >= 1);
 
-    std::cout << "Beginning raytracer loop..." << std::endl;
+    Utility::Print("Beginning raytracer loop...", "\n");
 
     int start_r = 0;
     int end_r = currentResolution.y;
@@ -96,6 +96,6 @@ void RayTracer::Run()
     imageWriter.CopyHDRToBitmap();
 
     // Save image.
-    std::cout << "Saving image to " << storedApplication->GetOutputFilename() << std::endl;
+    Utility::Print("Saving image to ", storedApplication->GetOutputFilename(), "\n");
     imageWriter.SaveImage();
 }

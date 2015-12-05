@@ -103,7 +103,7 @@ FinalSceneObject FinalSceneObject::ParseFSO(std::vector<std::string> row)
             case(Column::Object):
 
                 name = field;
-                std::cout << "Reading in " << name << std::endl;
+                Utility::Print("Reading in ", name, "\n");
                 break;
 
             case(Column::Description):
@@ -166,7 +166,7 @@ void FinalSceneObject::AddContainer(const std::vector<FinalSceneObject>& final_s
 {
     for (auto fso : final_scene_objects)
     {
-        std::cout << "Adding " << fso.name << " to scene..." << std::endl;
+        Utility::Print("Adding ", fso.name, " to scene...", "\n");
 
         // Get the material properties of the object
         std::shared_ptr<class Material> material = fso.MakeMaterial();

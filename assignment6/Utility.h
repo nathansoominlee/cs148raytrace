@@ -4,6 +4,7 @@
 #define __UTILITY__
 
 #include "common/core.h"
+#include "assignment6/CommandLineArgs.h"
 
 class Utility
 {
@@ -22,6 +23,35 @@ public:
                              int &start_c, int &start_r, int &end_c, int &end_r);
 
     static bool IsPerfectSquare(int n);
+
+    // Templated functions
+
+    // These function definitions have to be here in the header,
+    // otherwise callers (in other files) would need to #include "Utility.cpp"
+    // prior to useing these functions because the template definition has
+    // to be included prior to instantiating a given template class.
+    // http://stackoverflow.com/questions/999358/undefined-symbols-linker-error-with-simple-template-class
+
+    template<typename T, typename... Args>
+    static void Print(T t, Args... args) // recursive variadic function
+    {
+        if (CommandLineArgs::VERBOSE)
+        {
+            std::cout << t;
+            Print(args...);
+        }
+    }
+
+    template<typename T>
+    static void Print(T t)
+    {
+        if (CommandLineArgs::VERBOSE)
+        {
+            std::cout << t;
+        }
+    }
+
+
 
 };
 

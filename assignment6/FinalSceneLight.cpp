@@ -82,7 +82,7 @@ FinalSceneLight FinalSceneLight::ParseFSL(std::vector<std::string> row)
             case(Column::Name):
 
                 name = field;
-                std::cout << "Reading in " << name << std::endl;
+                Utility::Print("Reading in ", name, "\n");
                 break;
 
             case(Column::Description):
@@ -129,7 +129,7 @@ void FinalSceneLight::AddContainer(const std::vector<FinalSceneLight>& final_sce
 {
     for (auto fsl : final_scene_lights)
     {
-        std::cout << "Adding " << fsl.name << " to scene..." << std::endl;
+        Utility::Print("Adding ", fsl.name, " to scene...", "\n");
 
         switch (fsl.light_type)
         {

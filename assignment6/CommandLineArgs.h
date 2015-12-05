@@ -11,6 +11,8 @@ class CommandLineArgs
 public:
 
     static const std::string DEFAULT_OUTPUT_FILENAME_ROOT;
+    static bool VERBOSE;
+    static bool DIAGNOSTICS;
 
     CommandLineArgs(int argc, char **argv);
 
