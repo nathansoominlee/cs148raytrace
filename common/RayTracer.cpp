@@ -51,9 +51,15 @@ void RayTracer::Run()
     if (storedApplication->ChunkingRequested())
     {
         Utility::CalculateChunk(currentResolution.y, currentResolution.x, storedApplication->GetCurrentChunk(),
-                storedApplication->GetTotalChunks(), start_r, end_r, start_c, end_c);
+                storedApplication->GetTotalChunks(), start_c, start_r, end_c, end_r);
     }
 
+    /*
+    std::cout << "start_r: " << start_r << std::endl;
+    std::cout << "end_r: " << end_r << std::endl;
+    std::cout << "start_c: " << start_c << std::endl;
+    std::cout << "end_c: " << end_c << std::endl;
+    */
     //#pragma omp parallel for
     for (int r = start_r; r < end_r; ++r) {
         for (int c = start_c; c < end_c; ++c) {

@@ -82,12 +82,33 @@ std::shared_ptr<class SceneObject> Utility::LoadObj(std::shared_ptr<class Materi
 void Utility::CalculateChunk(int res_y, int res_x, int chunk, int total_chunks,
                              int &start_c, int &start_r, int &end_c, int &end_r)
 {
-    int cols_per_chunk = res_y / total_chunks;
-    int rows_per_chunk = res_x / total_chunks;
+    int cols_per_chunk = res_x / sqrt(total_chunks);
+    int rows_per_chunk = res_y / sqrt(total_chunks);
+
+    /*
+    std::cout << "res_y: " << res_y << std::endl;
+    std::cout << "res_x: " << res_x << std::endl;
+    std::cout << "cols_per_chunk: " << cols_per_chunk << std::endl;
+    std::cout << "rows_per_chunk: " << rows_per_chunk << std::endl;
+    */
+
 
     start_c = cols_per_chunk * chunk;
     start_r = rows_per_chunk * chunk;
 
     end_c = start_c + cols_per_chunk;
     end_r = start_r + rows_per_chunk;
+}
+
+
+
+bool Utility::IsPerfectSquare(int n) 
+{
+    if (n < 0)
+    {
+        return false;
+    }
+
+    int root = round(sqrt(n));
+    return n == root * root;
 }

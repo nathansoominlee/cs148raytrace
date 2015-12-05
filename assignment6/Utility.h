@@ -21,6 +21,8 @@ public:
     static void CalculateChunk(int res_y, int res_x, int chunk, int total_chunks,
                              int &start_c, int &start_r, int &end_c, int &end_r);
 
+    static bool IsPerfectSquare(int n);
+
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include "assignment6/CommandLineArgs.h"
+#include "assignment6/Utility.h"
 #include <regex>
 
 // static initializer, cannot do inline in .h because "must be initialzed out of line" error
@@ -147,13 +148,20 @@ void CommandLineArgs::ProcessArgs()
         this->res_height = DEFAULT_RESOLUTION_HEIGHT;
     }
 
-    // If the user requested chunking, make sure that the resolution width and height are divisible
-    // by the total number of chunks
     
-    if (this->total_chunks != -1)
+    // If the user requested chunking
+    if (this->ChunkingRequested())
     {
-        if ( (this->res_width  % this->total_chunks != 0) ||
-             (this->res_height % this->total_chunks != 0) )
+        // Check that total is a perfect square
+        if ( ! Utility::IsPerfectSquare(this->total_chunks) )
+        {
+            std::cerr << "Error: total_chunks " << this->total_chunks << " is not a perfect square." << std::endl;
+        }
+
+        // check that res width and res height are divisible by square root of total num chunks
+        int num = (int) sqrt(this->total_chunks);
+        if ( (this->res_width  % num != 0) ||
+             (this->res_height % num != 0) )
         {
             std::cerr << "Error: width " << this->res_width << " and height " << this->res_height <<
                 "must be divisible by the total number of chunks " << this->total_chunks << std::endl;
