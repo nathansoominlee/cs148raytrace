@@ -10,8 +10,6 @@ class CommandLineArgs
 
 public:
 
-    static const int DEFAULT_RESOLUTION_WIDTH = 1280;
-    static const int DEFAULT_RESOLUTION_HEIGHT = 720;
     static const std::string DEFAULT_OUTPUT_FILENAME_ROOT;
 
     CommandLineArgs(int argc, char **argv);
@@ -35,6 +33,9 @@ public:
     int GetTotalChunks() const { return this->total_chunks; }
 
 private:
+    
+    const int DEFAULT_RESOLUTION_WIDTH = 1280;
+    const int DEFAULT_RESOLUTION_HEIGHT = 720;
 
     void ProcessArgs();
 

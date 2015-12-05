@@ -1,4 +1,5 @@
 #include "common/RayTracer.h"
+#include "assignment6/ChunkComposer.h"
 
 #define ASSIGNMENT 6
 #if ASSIGNMENT == 5
@@ -29,6 +30,7 @@ int main(int argc, char** argv)
     if (args.ChunkComposeRequested())
     {
         // User wants to compose output files
+        ChunkComposer cc(args.GetInputFilenameRoot());
         std::cerr << "Error: Compose output files not implemented." << std::endl;
         exit(1);
     }

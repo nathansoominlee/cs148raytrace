@@ -1,4 +1,5 @@
 #include "assignment6/CommandLineArgs.h"
+#include <regex>
 
 // static initializer, cannot do inline in .h because "must be initialzed out of line" error
 // http://stackoverflow.com/questions/1563897/c-static-constant-string-class-member
@@ -86,6 +87,24 @@ CommandLineArgs::CommandLineArgs(int argc, char **argv)
 void CommandLineArgs::ProcessArgs()
 {
 
+    if (!this->input_filename_root.empty())
+    {
+        // The user requested that we compose chunks, make sure that all the info we need
+        // is present in the filename itself (this restricts chunk filenames to a specific fmt)
+
+        // The following is an acceptable matching: output1600x900_100-16.png  
+        static const std::regex input_filename_fmt("[a-zA-Z]+[0-9]+x[0-9]+_[0-9]+-[0-9]+.[a-zA-Z]+");
+        //                                          output   1600  x900   _100   -16    .png
+        if ( ! std::regex_match(this->input_filename_root, input_filename_fmt))
+        {
+            std::cerr << "Error: the chunk file name " << this->input_filename_root << " has been changed since writing"
+                         " or was written incorrectly." << std::endl;
+            PrintUsage();
+            exit(1);
+        }
+
+    }
+
     // If we are processing in chunks, make sure that if the user set the total chunk or the current chunk
     // that they also set the other one
     if ( (this->total_chunks == -1 && this->current_chunk != -1) ||
@@ -97,10 +116,22 @@ void CommandLineArgs::ProcessArgs()
         exit(1);
     }
 
-    // If the user did not set an output file name, then set it to the default
     if (this->output_filename_root.empty())
     {
+        // The user did not set an output file name, set it to the default
         this->output_filename_root = DEFAULT_OUTPUT_FILENAME_ROOT;
+    }
+    else
+    {
+        // The user did set an output file name, enforce single word constraint
+        std::regex alpha_word_regex("[a-zA-Z]+");
+        if ( ! std::regex_match(this->output_filename_root, alpha_word_regex) )
+        {
+            std::cerr << "Error: the argument " << this->output_filename_root << " after -o must be "
+                         "a single alpha word ([a-zA-Z]+)" << std::endl;
+            PrintUsage();
+            exit(1);
+        }
     }
 
     // If the resolution width or height was not set on the command line
