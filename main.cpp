@@ -24,15 +24,13 @@
 
 int main(int argc, char** argv)  
 {
-
     CommandLineArgs args(argc, argv);
 
     if (args.ChunkComposeRequested())
     {
         // User wants to compose output files
         ChunkComposer cc(args.GetInputFilenameRoot());
-        std::cerr << "Error: Compose output files not implemented." << std::endl;
-        exit(1);
+        cc.ComposeChunks();
     }
     else 
     {
