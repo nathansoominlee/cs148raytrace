@@ -31,7 +31,6 @@ Assignment6::Assignment6(const CommandLineArgs &args)
 std::string Assignment6::BuildOutputFilename(const CommandLineArgs &args)
 {
     std::string filename;
-    std::string file_fmt(".png");
 
     if (args.GetTotalChunks() == -1)
     {
@@ -48,25 +47,7 @@ std::string Assignment6::BuildOutputFilename(const CommandLineArgs &args)
                                "-" + std::to_string(args.GetCurrentChunk());
     }
 
-    // Do not clobber any output files that already exist
-    int i = 0;
-    std::ifstream file(filename + file_fmt);
-    while (file.good()) // checks that the file exists
-    {
-        file = std::ifstream(filename + "_" + std::to_string(++i) + file_fmt);
-    }
-
-    std::string retvalue;
-    if (i > 0)
-    {
-        retvalue = filename + "_" + std::to_string(i) + file_fmt;
-    }
-    else
-    {
-        retvalue = filename + file_fmt;
-    }
-
-    return std::move(retvalue);
+    return std::move(filename + ".png");
 }
 
 std::shared_ptr<Camera> Assignment6::CreateCamera() const
