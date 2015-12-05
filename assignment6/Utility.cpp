@@ -92,9 +92,11 @@ void Utility::CalculateChunk(int res_y, int res_x, int chunk, int total_chunks,
     std::cout << "rows_per_chunk: " << rows_per_chunk << std::endl;
     */
 
-
-    start_c = cols_per_chunk * chunk;
-    start_r = rows_per_chunk * chunk;
+    // Render chunks from top to bottom, left to right. So we go 
+    // build picture across descending rows like a scanline renderer 
+    // or a TV picture.
+    start_c = cols_per_chunk * (chunk % (int) sqrt(total_chunks));
+    start_r = rows_per_chunk * (chunk / (int) sqrt(total_chunks));
 
     end_c = start_c + cols_per_chunk;
     end_r = start_r + rows_per_chunk;
