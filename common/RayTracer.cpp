@@ -90,5 +90,6 @@ void RayTracer::Run()
     imageWriter.CopyHDRToBitmap();
 
     // Save image.
+    std::cout << "Saving image to " << storedApplication->GetOutputFilename() << std::endl;
     imageWriter.SaveImage();
 }
