@@ -10,6 +10,8 @@
 
 Assignment6::Assignment6(const CommandLineArgs &args)
 {
+    this->samples_per_pixel = args.GetSamplesPerPixel();
+
     this->res_width = args.GetResWidth();
     this->res_height = args.GetResHeight();
 
@@ -116,11 +118,6 @@ std::shared_ptr<ColorSampler> Assignment6::CreateSampler() const
 std::shared_ptr<class Renderer> Assignment6::CreateRenderer(std::shared_ptr<Scene> scene, std::shared_ptr<ColorSampler> sampler) const
 {
     return std::make_shared<BackwardRenderer>(scene, sampler);
-}
-
-int Assignment6::GetSamplesPerPixel() const
-{
-    return 1;
 }
 
 bool Assignment6::NotifyNewPixelSample(glm::vec3 inputSampleColor, int sampleIndex)

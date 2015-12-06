@@ -26,6 +26,8 @@ public:
 
     std::string GetInputFilenameRoot() const { return this->input_filename_root; }
     
+    int GetSamplesPerPixel() const { return this->samples_per_pixel; }
+
     int GetResWidth() const { return this->res_width; }
 
     int GetResHeight() const { return this->res_height; }
@@ -38,6 +40,7 @@ private:
     
     const int DEFAULT_RESOLUTION_WIDTH = 1280;
     const int DEFAULT_RESOLUTION_HEIGHT = 720;
+    const int DEFAULT_SAMPLES_PER_PIXEL = 1;
 
     void ProcessArgs();
 
@@ -47,8 +50,9 @@ private:
 
     std::string output_filename_root = "";
     std::string input_filename_root = "";
-    int res_width = -1;
-    int res_height = -1;
+    int samples_per_pixel = DEFAULT_SAMPLES_PER_PIXEL;
+    int res_width = DEFAULT_RESOLUTION_WIDTH;
+    int res_height = DEFAULT_RESOLUTION_HEIGHT;
     int current_chunk = -1;
     int total_chunks = -1;
 

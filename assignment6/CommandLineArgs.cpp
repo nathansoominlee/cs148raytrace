@@ -73,6 +73,14 @@ CommandLineArgs::CommandLineArgs(int argc, char **argv)
             }
             this->res_width = std::stoi(argv[++i]);
         }
+        else if (strncmp(argv[i], "-s", 3) == 0)
+        {
+            if (i + 1 == argc)
+            {
+                MissingArgAfter("-s", "samples per pixel");
+            }
+            this->samples_per_pixel = std::stoi(argv[++i]);
+        }
         else if (strncmp(argv[i], "-v", 3) == 0)
         {
             CommandLineArgs::VERBOSE = true;
@@ -145,20 +153,6 @@ void CommandLineArgs::ProcessArgs()
         }
     }
 
-    // If the resolution width or height was not set on the command line
-    // then set it to the defaults
-
-    if (this->res_width == -1)
-    {
-        this->res_width = DEFAULT_RESOLUTION_WIDTH;
-    }
-    
-    if (this->res_height == -1)
-    {
-        this->res_height = DEFAULT_RESOLUTION_HEIGHT;
-    }
-
-    
     // If the user requested chunking
     if (this->ChunkingRequested())
     {
@@ -188,6 +182,7 @@ void CommandLineArgs::PrintUsage()
                  "\tcs148raytracer               Render the full scene\n" 
                  "\tcs148raytracer -v            Print verbose output\n" 
                  "\tcs148raytracer -d            Print diagnostics (timing + intersection counts)\n" 
+                 "\tcs148raytracer -s sss        Set the samples per pixel\n" 
                  "\tcs148raytracer -t ttt -c ccc Render the ccc/ttt chunk of the scene\n"
                  "\tcs148raytracer -h hhh        Set the resolution height\n" 
                  "\tcs148raytracer -w www        Set the resolution width\n" 
