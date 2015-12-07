@@ -40,8 +40,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.001
 Ns 96.078431
@@ -52,8 +52,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.002
 Ns 96.078431
@@ -64,8 +64,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.003
 Ns 96.078431
@@ -76,8 +76,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.004
 Ns 96.078431
@@ -88,8 +88,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.005
 Ns 96.078431
@@ -100,8 +100,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.006
 Ns 96.078431
@@ -112,8 +112,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.007
 Ns 96.078431
@@ -124,8 +124,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.008
 Ns 96.078431
@@ -136,8 +136,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.009
 Ns 96.078431
@@ -148,8 +148,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.010
 Ns 96.078431
@@ -160,8 +160,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.011
 Ns 96.078431
@@ -172,8 +172,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.012
 Ns 96.078431
@@ -184,8 +184,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.013
 Ns 96.078431
@@ -196,8 +196,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.014
 Ns 96.078431
@@ -208,8 +208,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.015
 Ns 96.078431
@@ -220,8 +220,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl initialShadingGroup.016
 Ns 96.078431
@@ -232,8 +232,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd brick/bricktexture.jpg
-map_Ks brick/bricktexture.jpg
+map_Kd brick\\bricktexture.jpg
+map_Ks brick\\bricktexture.jpg
 
 newmtl leftWall
 Ns 9.803922

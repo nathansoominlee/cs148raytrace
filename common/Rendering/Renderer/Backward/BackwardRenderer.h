@@ -9,4 +9,3 @@ public:
     virtual void InitializeRenderer() override;
     glm::vec3 ComputeSampleColor(const struct IntersectionState& intersection, const class Ray& fromCameraRay) const override;
 };
-

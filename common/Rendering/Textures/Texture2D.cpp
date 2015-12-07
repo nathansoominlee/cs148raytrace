@@ -15,7 +15,7 @@ glm::vec4 Texture2D::Sample(const glm::vec2& coord) const
     const glm::vec2 imageSpaceCoordinates = coord * glm::vec2(texWidth, texHeight);
 
     glm::vec2 floorVec(std::floor(imageSpaceCoordinates.x), std::floor(imageSpaceCoordinates.y));
-    glm::vec2 ceilVec(std::ceil(imageSpaceCoordinates.x), std::ceil(imageSpaceCoordinates.y));
+    glm::vec2 ceilVec(floorVec.x + 1.f, floorVec.y + 1.f);
 
     // Bilinear Interpolation
     const glm::ivec2 q11(floorVec);
@@ -31,9 +31,17 @@ glm::vec4 Texture2D::Sample(const glm::vec2& coord) const
 glm::ivec2 Texture2D::HandleBorderCondition(const glm::ivec2& coord) const
 {
     // By default, do repeat across borders
-    glm::ivec2 result;
-    result.x = coord.x % texWidth;
-    result.y = coord.y % texHeight;
+    glm::ivec2 result = coord;
+    if (result.x < 0) {
+        result.x = texWidth + result.x;
+    }
+
+    if (result.y < 0) {
+        result.y = texHeight + result.y;
+    }
+
+    result.x = result.x % texWidth;
+    result.y = result.y % texHeight;
     return result;
 }
 
