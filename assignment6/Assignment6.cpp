@@ -79,7 +79,7 @@ std::shared_ptr<Scene> Assignment6::CreateSceneFromSheet() const
     std::shared_ptr<Scene> scene = std::make_shared<Scene>();
 
     // Import the object sheet
-    bool use_cached_sheet = false;
+    bool use_cached_sheet = true;
     Rows rows = SheetReader::ImportSheet(this->objects_URL, this->objects_PATH, use_cached_sheet);
 
     // Parse the objects
@@ -94,7 +94,7 @@ std::shared_ptr<Scene> Assignment6::CreateSceneFromSheet() const
     scene->GenerateAccelerationData(AccelerationTypes::BVH); 
 
     // Import the light sheet
-    use_cached_sheet = false;
+    use_cached_sheet = true;
     rows = SheetReader::ImportSheet(this->lights_URL, this->lights_PATH, use_cached_sheet);
 
     // Parse the lights

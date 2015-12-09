@@ -50,8 +50,8 @@ private:
 
     const std::string objects_URL = "\"" + baseURL + key + fmt + gid_objects + "\"";
     const std::string lights_URL =  "\"" + baseURL + key + fmt + gid_lights + "\"";
-    const std::string objects_PATH = "objects.tsv";
-    const std::string lights_PATH = "lights.tsv";
+    const std::string objects_PATH = "C:/Users/natha/Downloads/objects.tsv";
+    const std::string lights_PATH = "C:/Users/natha/Downloads/lights.tsv";
 
     const std::string sheet_path_local = "C:/Users/natha/Downloads/scene_scanline.tsv";
 
