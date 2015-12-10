@@ -24,7 +24,10 @@
 #include "common/Utility/Diagnostics/Diagnostics.h"
 
 const float PI = 3.14159265359f;
-const float LARGE_EPSILON = 1e-5f;
+
+// Get rid of the black dotted triangles
+//const float LARGE_EPSILON = 1e-5f; 
+const float LARGE_EPSILON = 1e-2f;
 const float SMALL_EPSILON = 1e-7f;
 
 
