@@ -111,8 +111,8 @@ std::shared_ptr<Scene> Assignment6::CreateSceneFromSheet() const
 std::shared_ptr<ColorSampler> Assignment6::CreateSampler() const
 {
     std::shared_ptr<JitterColorSampler> jitter = std::make_shared<JitterColorSampler>();
-    jitter->SetGridSize(glm::ivec3(1, 1, 1));
-    return jitter;
+	jitter->SetGridSize(glm::ivec3(5, 5, 2));
+	return jitter;
 }
 
 std::shared_ptr<class Renderer> Assignment6::CreateRenderer(std::shared_ptr<Scene> scene, std::shared_ptr<ColorSampler> sampler) const

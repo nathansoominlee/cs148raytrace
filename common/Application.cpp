@@ -2,6 +2,16 @@
 #include "common/Acceleration/AccelerationCommon.h"
 #include "common/Output/ImageWriter.h"
 
+bool Application::EnableDOF() const
+{
+	return true;
+}
+
+int Application::GetNDepthOfFieldRays() const
+{
+	return 128;
+}
+
 std::string Application::GetOutputFilename() const
 {
     return "output.png";

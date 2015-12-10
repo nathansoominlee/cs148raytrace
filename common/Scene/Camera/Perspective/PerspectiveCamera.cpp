@@ -6,7 +6,7 @@ PerspectiveCamera::PerspectiveCamera(float aspectRatio, float inputFov):
 {
 }
 
-std::shared_ptr<Ray> PerspectiveCamera::GenerateRayForNormalizedCoordinates(glm::vec2 coordinate) const
+std::shared_ptr<Ray> PerspectiveCamera::GenerateRayForNormalizedCoordinates(glm::vec2 coordinate, bool depthOfFieldEnabled) const
 {
     // Send ray from the camera to the image plane -- make the assumption that the image plane is at z = 1 in camera space.
     const glm::vec3 rayOrigin = glm::vec3(GetPosition());
@@ -25,7 +25,30 @@ std::shared_ptr<Ray> PerspectiveCamera::GenerateRayForNormalizedCoordinates(glm:
     const glm::vec3 targetPosition = rayOrigin + glm::vec3(GetForwardDirection()) + glm::vec3(GetRightDirection()) * xOffset + glm::vec3(GetUpDirection()) * yOffset;
 
     const glm::vec3 rayDirection = glm::normalize(targetPosition - rayOrigin);
-    return std::make_shared<Ray>(rayOrigin + rayDirection * zNear, rayDirection, zFar - zNear);
+
+	if (!depthOfFieldEnabled)
+		return std::make_shared<Ray>(rayOrigin + rayDirection * zNear, rayDirection, zFar - zNear);
+	else {
+
+		float randXOffset = -lensRadius + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (lensRadius + lensRadius)));
+		float maxYOffset = sqrt(lensRadius*lensRadius - randXOffset*randXOffset); // pythagorian.
+		float randYOffset = -maxYOffset + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (maxYOffset + maxYOffset)));
+
+
+		const glm::vec3 newRayOrigin = glm::vec3(GetPosition()) + glm::vec3(GetRightDirection()) * randXOffset + glm::vec3(GetUpDirection()) * randYOffset;
+
+		const float newPlaneHeight = std::tan(fov / 2.f) * 2.f *zFocalPlane;
+		const float newPlaneWidth = newPlaneHeight * aspectRatio;
+
+		//const glm::vec3 newTargetPosition = rayDirection*zFocalPlane;	// position of the focal point.
+
+		const float xOffset = newPlaneWidth * (coordinate.x - 0.5f);
+		const float yOffset = -1.f * newPlaneHeight  * (coordinate.y - 0.5f);
+		const glm::vec3 newTargetPosition = glm::vec3(GetPosition()) + glm::vec3(GetForwardDirection())*zFocalPlane + glm::vec3(GetRightDirection()) * xOffset + glm::vec3(GetUpDirection()) * yOffset;
+		const glm::vec3 newRayDirection = glm::normalize(newTargetPosition - newRayOrigin);
+		return std::make_shared<Ray>(newRayOrigin + newRayDirection * zNear, newRayDirection, zFar - zNear);
+	}
+
 }
 
 void PerspectiveCamera::SetZNear(float input)

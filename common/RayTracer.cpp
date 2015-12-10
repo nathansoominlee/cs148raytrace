@@ -63,29 +63,67 @@ void RayTracer::Run()
     //#pragma omp parallel for
     for (int r = start_r; r < end_r; ++r) {
         for (int c = start_c; c < end_c; ++c) {
-            imageWriter.SetPixelColor(currentSampler->ComputeSamplesAndColor(maxSamplesPerPixel, 2, [&](glm::vec3 inputSample) {
-                const glm::vec3 minRange(-0.5f, -0.5f, 0.f);
-                const glm::vec3 maxRange(0.5f, 0.5f, 0.f);
-                const glm::vec3 sampleOffset = (maxSamplesPerPixel == 1) ? glm::vec3(0.f, 0.f, 0.f) : minRange + (maxRange - minRange) * inputSample;
 
-                glm::vec2 normalizedCoordinates(static_cast<float>(c) + sampleOffset.x, static_cast<float>(r) + sampleOffset.y);
-                normalizedCoordinates /= currentResolution;
+			if (!storedApplication->EnableDOF()) {
+				imageWriter.SetPixelColor(currentSampler->ComputeSamplesAndColor(maxSamplesPerPixel, 2, [&](glm::vec3 inputSample) {
+					const glm::vec3 minRange(-0.5f, -0.5f, 0.f);
+					const glm::vec3 maxRange(0.5f, 0.5f, 0.f);
+					const glm::vec3 sampleOffset = (maxSamplesPerPixel == 1) ? glm::vec3(0.f, 0.f, 0.f) : minRange + (maxRange - minRange) * inputSample;
 
-                // Construct ray, send it out into the scene and see what we hit.
-                std::shared_ptr<Ray> cameraRay = currentCamera->GenerateRayForNormalizedCoordinates(normalizedCoordinates);
-                assert(cameraRay);
+					glm::vec2 normalizedCoordinates(static_cast<float>(c) + sampleOffset.x, static_cast<float>(r) + sampleOffset.y);
+					normalizedCoordinates /= currentResolution;
 
-                IntersectionState rayIntersection(storedApplication->GetMaxReflectionBounces(), storedApplication->GetMaxRefractionBounces());
-                bool didHitScene = currentScene->Trace(cameraRay.get(), &rayIntersection);
 
-                // Use the intersection data to compute the BRDF response.
-                glm::vec3 sampleColor;
-                if (didHitScene) {
-                    sampleColor = currentRenderer->ComputeSampleColor(rayIntersection, *cameraRay.get());
-                }
+					// Construct ray, send it out into the scene and see what we hit.
+					std::shared_ptr<Ray> cameraRay = currentCamera->GenerateRayForNormalizedCoordinates(normalizedCoordinates, false);
+					assert(cameraRay);
 
-                return sampleColor;
-            }), c, r);
+					IntersectionState rayIntersection(storedApplication->GetMaxReflectionBounces(), storedApplication->GetMaxRefractionBounces());
+					bool didHitScene = currentScene->Trace(cameraRay.get(), &rayIntersection);
+
+					// Use the intersection data to compute the BRDF response.
+					glm::vec3 sampleColor;
+					if (didHitScene) {
+						sampleColor = currentRenderer->ComputeSampleColor(rayIntersection, *cameraRay.get());
+					}
+					return sampleColor;
+				}), c, r);
+			}
+
+			else {
+
+				imageWriter.SetPixelColor(currentSampler->ComputeSamplesAndColor(maxSamplesPerPixel, 2, [&](glm::vec3 inputSample) {
+					const glm::vec3 minRange(-0.5f, -0.5f, 0.f);
+					const glm::vec3 maxRange(0.5f, 0.5f, 0.f);
+					const glm::vec3 sampleOffset = (maxSamplesPerPixel == 1) ? glm::vec3(0.f, 0.f, 0.f) : minRange + (maxRange - minRange) * inputSample;
+
+					glm::vec2 normalizedCoordinates(static_cast<float>(c) + sampleOffset.x, static_cast<float>(r) + sampleOffset.y);
+					normalizedCoordinates /= currentResolution;
+
+					const int nSamples = 32;    // edit to change detail
+	
+					glm::vec3 averagedColor;	// array of added rgb values, later used to average
+
+					for (int i = 0; i < nSamples; i++) {
+						// Construct a number of rays, send it out into the scene and see what we hit.
+						std::shared_ptr<Ray> cameraRay = currentCamera->GenerateRayForNormalizedCoordinates(normalizedCoordinates, true);
+						assert(cameraRay);
+
+						IntersectionState rayIntersection(storedApplication->GetMaxReflectionBounces(), storedApplication->GetMaxRefractionBounces());
+						bool didHitScene = currentScene->Trace(cameraRay.get(), &rayIntersection);
+
+						// Use the intersection data to compute the BRDF response.
+						glm::vec3 sampleColor;
+						if (didHitScene) {
+							sampleColor = currentRenderer->ComputeSampleColor(rayIntersection, *cameraRay.get());
+						}
+						averagedColor += sampleColor;
+					}
+
+					averagedColor /= nSamples;
+					return averagedColor;
+				}), c, r);
+			}
         }
     }
 
