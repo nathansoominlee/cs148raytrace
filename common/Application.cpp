@@ -4,7 +4,7 @@
 
 bool Application::EnableDOF() const
 {
-	return true;
+	return false;
 }
 
 int Application::GetNDepthOfFieldRays() const
@@ -19,7 +19,7 @@ std::string Application::GetOutputFilename() const
 
 int Application::GetSamplesPerPixel() const
 {
-    return 16;
+    return 4;
 }
 
 glm::vec2 Application::GetImageOutputResolution() const

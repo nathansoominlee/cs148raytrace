@@ -75,7 +75,7 @@ void RayTracer::Run()
 
 
 					// Construct ray, send it out into the scene and see what we hit.
-					std::shared_ptr<Ray> cameraRay = currentCamera->GenerateRayForNormalizedCoordinates(normalizedCoordinates, false);
+					std::shared_ptr<Ray> cameraRay = currentCamera->GenerateRayForNormalizedCoordinates(normalizedCoordinates, false);	// dof disabled
 					assert(cameraRay);
 
 					IntersectionState rayIntersection(storedApplication->GetMaxReflectionBounces(), storedApplication->GetMaxRefractionBounces());
@@ -106,7 +106,7 @@ void RayTracer::Run()
 
 					for (int i = 0; i < nSamples; i++) {
 						// Construct a number of rays, send it out into the scene and see what we hit.
-						std::shared_ptr<Ray> cameraRay = currentCamera->GenerateRayForNormalizedCoordinates(normalizedCoordinates, true);
+						std::shared_ptr<Ray> cameraRay = currentCamera->GenerateRayForNormalizedCoordinates(normalizedCoordinates, true);	// dof enabled
 						assert(cameraRay);
 
 						IntersectionState rayIntersection(storedApplication->GetMaxReflectionBounces(), storedApplication->GetMaxRefractionBounces());

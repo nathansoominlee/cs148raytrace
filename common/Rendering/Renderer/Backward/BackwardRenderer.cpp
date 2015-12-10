@@ -39,10 +39,18 @@ glm::vec3 BackwardRenderer::ComputeSampleColor(const IntersectionState& intersec
         std::vector<Ray> sampleRays;
         light->ComputeSampleRays(sampleRays, intersectionPoint, intersection.ComputeNormal());
 
+		IntersectionState savedState;
+
         for (size_t s = 0; s < sampleRays.size(); ++s) {
             // note that max T should be set to be right before the light.
-            if (storedScene->Trace(&sampleRays[s], nullptr)) {
-                continue;
+            if (storedScene->Trace(&sampleRays[s], &savedState)) {
+                //hit an object 
+
+				//if object is somewhat transclucent
+				//calculate brdf
+
+				//if object is opaque
+				continue;	//skip brdf response
             }
             const float lightAttenuation = light->ComputeLightAttenuation(intersectionPoint);
 
